@@ -1,19 +1,27 @@
 ---
 import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
 import "../styles/global.css";
 
-const { title = "Hayvan Hakları Platformu" } = Astro.props;
+const { title = "Hayvan Hakları Platformu", description = "Sessiz bırakılan canların sesi. Hayvan hakları ihlallerini görünür kılmak için bağımsız bir farkındalık platformu." } = Astro.props;
 ---
 
 <html lang="tr">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width" />
-    <title>{title}</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content={description} />
+  <title>{title}</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 </head>
 
-<body class="min-h-screen bg-zinc-950 text-white">
-<Header />
-<slot />
+<body class="min-h-screen flex flex-col bg-[#fafaf8] text-[#0f172a]">
+  <Header />
+  <div class="flex-1">
+    <slot />
+  </div>
+  <Footer />
 </body>
 </html>

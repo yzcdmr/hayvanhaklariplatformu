@@ -1,162 +1,159 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+
+const news = [
+  {
+    slug: "istanbul-200-kopek-kurtarildi",
+    category: "Kurtarma",
+    categoryColor: "bg-[#5C7A5E]/15 text-[#5C7A5E]",
+    title: "İstanbul'da 200 Sokak Köpeği Güvenli Barınağa Taşındı",
+    excerpt: "Beşiktaş Belediyesi ile yürütülen ortak operasyonda 200'den fazla sokak köpeği rehabilitasyon merkezine kavuştu.",
+    date: "24 Mayıs 2026",
+    readTime: "3 dk",
+    image: "https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=600&q=80",
+  },
+  {
+    slug: "yesil-kaplumbaga-koruma",
+    category: "Deniz Canlıları",
+    categoryColor: "bg-blue-100 text-blue-700",
+    title: "Yeşil Kaplumbağa Koruma Projesi Akdeniz'e Yayılıyor",
+    excerpt: "WWF Türkiye ortaklığıyla başlatılan proje kapsamında Antalya kıyılarındaki yuvalama alanları koruma altına alındı.",
+    date: "20 Mayıs 2026",
+    readTime: "4 dk",
+    image: "https://images.unsplash.com/photo-1518020382113-a7e8fc38eac9?w=600&q=80",
+  },
+  {
+    slug: "hayvan-haklari-yasa-mecliste",
+    category: "Mevzuat",
+    categoryColor: "bg-[#B5634B]/12 text-[#B5634B]",
+    title: "Hayvan Hakları Yasa Teklifi TBMM Gündemine Taşındı",
+    excerpt: "Birden fazla milletvekili tarafından ortak hazırlanan yasa teklifi canlı hayvan ticaretinde köklü değişiklik öngörüyor.",
+    date: "15 Mayıs 2026",
+    readTime: "5 dk",
+    image: "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=600&q=80",
+  },
+];
+
+const stats = [
+  { number: "12.400+", label: "Takipçi",       icon: "👥" },
+  { number: "340+",    label: "Haber & Rapor",  icon: "📰" },
+  { number: "58",      label: "Destekçi Kurum", icon: "🤝" },
+  { number: "3",       label: "Yıllık Deneyim", icon: "⭐" },
+];
 ---
 
-<BaseLayout title="Hayvan Hakları Platformu">
+<BaseLayout title="Ana Sayfa | Hayvan Hakları Platformu">
 
-    <div class="flex min-h-screen bg-[#d9f1ff]">
-
-        <!-- Sidebar -->
-        <aside class="w-[320px] bg-[#bfe8ff] border-r border-blue-200 flex flex-col">
-
-            <!-- Logo -->
-            <div class="p-8 border-b border-blue-200">
-                <h1 class="text-3xl font-black text-[#0f172a] leading-tight">
-                    Hayvan Hakları
-                    Platformu
-                </h1>
-
-                <p class="mt-3 text-sm text-slate-700">
-                    Sessiz bırakılan canların sesi.
-                </p>
-            </div>
-
-            <!-- Menu -->
-            <nav class="flex flex-col gap-2 p-5">
-
-                <!-- Active -->
-                <a
-                        href="/"
-                        class="bg-[#0f172a] text-white px-5 py-4 rounded-2xl font-semibold"
-                >
-                    Ana Sayfa
-                </a>
-
-                <a
-                        href="/manifesto"
-                        class="text-slate-800 hover:bg-blue-100 px-5 py-4 rounded-2xl transition"
-                >
-                    Manifestomuz
-                </a>
-
-                <a
-                        href="/haberler"
-                        class="text-slate-800 hover:bg-blue-100 px-5 py-4 rounded-2xl transition"
-                >
-                    Haberler
-                </a>
-
-                <a
-                        href="/hakkimizda"
-                        class="text-slate-800 hover:bg-blue-100 px-5 py-4 rounded-2xl transition"
-                >
-                    Hakkımızda
-                </a>
-
-                <a
-                        href="/information"
-                        class="text-slate-800 hover:bg-blue-100 px-5 py-4 rounded-2xl transition"
-                >
-                    İletişim
-                </a>
-
-            </nav>
-
-            <!-- Bottom -->
-            <div class="mt-auto p-6 border-t border-blue-200">
-
-                <div class="rounded-2xl bg-[#0f172a] p-5 text-white">
-                    <p class="text-sm uppercase tracking-widest text-blue-200">
-                        Manifesto
-                    </p>
-
-                    <p class="mt-3 text-lg font-semibold leading-7">
-                        Yaşam hakkı pazarlık konusu değildir.
-                    </p>
-                </div>
-
-            </div>
-
-        </aside>
-
-        <!-- Main -->
-        <main class="flex-1">
-
-            <!-- Hero -->
-            <section class="relative h-screen overflow-hidden">
-
-                <!-- Background -->
-                <img
-                        src="/images/hayvanhaklari1.png"
-                        alt="Hayvan Hakları"
-                        class="absolute inset-0 h-full w-full object-cover"
-                />
-
-                <!-- Overlay -->
-                <div class="absolute inset-0 bg-black/45"></div>
-
-                <!-- Content -->
-                <div class="relative z-10 flex h-full items-center justify-between px-20">
-
-                    <div class="max-w-4xl text-white">
-
-                        <p class="mb-6 text-sm uppercase tracking-[0.35em] text-blue-200">
-                            Hayvan Hakları Yayın Platformu
-                        </p>
-
-                        <h2 class="text-7xl font-black leading-tight">
-                            Onların sesi yoksa,
-                            bizim vicdanımız var.
-                        </h2>
-
-                        <p class="mt-8 max-w-2xl text-2xl leading-10 text-zinc-200">
-                            Hayvan hakları ihlallerini görünür kılmak,
-                            toplumsal farkındalık oluşturmak ve yaşam hakkını savunmak için buradayız.
-                        </p>
-
-                        <div class="mt-12 flex gap-5">
-
-                            <!--<a
-                                    href="/manifesto"
-                                    class="rounded-2xl bg-[#0f172a] px-8 py-4 text-lg font-semibold hover:bg-slate-800"
-                            >
-                                Manifestoyu Oku
-                            </a>-->
-
-                            <a
-                                    href="/haberler"
-                                    class="rounded-2xl border border-white/50 bg-white/10 px-8 py-4 text-lg font-semibold backdrop-blur"
-                            >
-                                Haberleri Gör
-                            </a>
-
-                        </div>
-
-                    </div>
-                    <!-- Floating Video Card -->
-                    <div class="absolute right-16 top-16 hidden xl:block z-20">
-
-                        <div class="w-[360px] overflow-hidden rounded-[32px] border border-white/20 bg-white/10 backdrop-blur-xl shadow-2xl transition duration-500 hover:-translate-y-2 hover:bg-white/15">
-
-                            <video
-                                    autoplay
-                                    muted
-                                    loop
-                                    playsinline
-                                    class="h-[220px] w-full object-cover"
-                            >
-                                <source src="/videos/Manifesto.mp4" type="video/mp4" />
-                            </video>
-
-                        </div>
-
-                    </div>
-                </div>
-
-            </section>
-
-        </main>
-
+  <!-- HERO -->
+  <section class="relative min-h-[92vh] flex items-center overflow-hidden bg-[#1C1814]">
+    <div class="absolute inset-0">
+      <video autoplay muted loop playsinline class="absolute inset-0 h-full w-full object-cover opacity-20">
+        <source src="/videos/Manifesto.mp4" type="video/mp4" />
+      </video>
+      <div class="absolute inset-0 bg-gradient-to-r from-[#1C1814] via-[#1C1814]/80 to-transparent"></div>
+      <div class="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#1C1814]/60"></div>
     </div>
+
+    <div class="relative z-10 mx-auto max-w-7xl px-5 sm:px-8 py-20 w-full">
+      <div class="max-w-2xl">
+        <span class="section-label animate-fadeInUp">Hayvan Hakları Türkiye Platformu</span>
+
+        <h1 class="text-5xl sm:text-6xl lg:text-7xl font-black text-white leading-[1.1] mt-3 animate-fadeInUp delay-1">
+          Onların sesi
+          <span class="text-[#D4856E]"> yoksa,</span><br/>
+          bizim vicdanımız
+          <em class="not-italic font-black text-[#F5EFE6]"> var.</em>
+        </h1>
+
+        <p class="mt-6 text-lg sm:text-xl text-[#C4B5AB] leading-relaxed max-w-xl animate-fadeInUp delay-2">
+          Hayvan hakları ihlallerini görünür kılmak, toplumsal farkındalık oluşturmak ve
+          yaşam hakkını savunmak için bağımsız bir platform.
+        </p>
+
+        <div class="mt-10 flex flex-wrap gap-4 animate-fadeInUp delay-3">
+          <a href="/haberler" class="btn-accent">Son Haberleri Gör</a>
+          <a href="/manifesto" class="btn-outline">Manifestomuzu Oku</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 text-white/30 text-xs animate-bounce">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+    </div>
+  </section>
+
+  <!-- STATS -->
+  <!--<section class="bg-[#F5EFE6] border-b border-[#E8DDD2]">
+    <div class="mx-auto max-w-7xl px-5 sm:px-8 py-12">
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
+        {stats.map(s => (
+          <div class="text-center">
+            <div class="text-3xl mb-2">{s.icon}</div>
+            <div class="text-3xl sm:text-4xl font-black text-[#1C1814]">{s.number}</div>
+            <div class="text-sm text-[#8A7B6F] mt-1 font-medium">{s.label}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>-->
+
+  <!-- NEWS SECTION -->
+  <section class="mx-auto max-w-7xl px-5 sm:px-8 py-20">
+    <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-12">
+      <div>
+        <span class="section-label">Son Gelişmeler</span>
+        <h2 class="section-title">Güncel Haberler</h2>
+      </div>
+      <a href="/haberler" class="btn-primary shrink-0">Tüm Haberleri Gör →</a>
+    </div>
+
+    <!--<div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      {news.map(item => (
+        <article class="card group">
+          <div class="overflow-hidden h-52">
+            <img src={item.image} alt={item.title}
+                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+          </div>
+          <div class="p-6">
+            <div class="flex items-center justify-between mb-3">
+              <span class={`text-xs font-bold px-3 py-1 rounded-full ${item.categoryColor}`}>{item.category}</span>
+              <span class="text-xs text-[#8A7B6F]">{item.readTime} okuma</span>
+            </div>
+            <h3 class="font-bold text-lg leading-snug text-[#1C1814] group-hover:text-[#B5634B] transition-colors">
+              {item.title}
+            </h3>
+            <p class="mt-2 text-sm text-[#8A7B6F] leading-relaxed line-clamp-2">{item.excerpt}</p>
+            <div class="mt-4 flex items-center justify-between text-xs text-[#8A7B6F]">
+              <span>{item.date}</span>
+              <a href={`/haberler/${item.slug}`} class="font-semibold text-[#B5634B] hover:underline">Devamını oku →</a>
+            </div>
+          </div>
+        </article>
+      ))}
+    </div>-->
+  </section>
+
+  <!-- MANIFESTO CTA -->
+  <section class="mx-auto max-w-7xl px-5 sm:px-8 pb-20">
+    <div class="rounded-3xl bg-[#1C1814] text-white px-8 py-16 sm:px-16 relative overflow-hidden">
+      <div class="absolute -top-24 -right-24 w-80 h-80 bg-[#B5634B]/20 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="absolute -bottom-12 -left-12 w-64 h-64 bg-[#5C7A5E]/15 rounded-full blur-3xl pointer-events-none"></div>
+
+      <div class="relative z-10 max-w-2xl">
+        <span class="section-label text-[#D4856E]">Manifestomuz</span>
+        <h2 class="text-4xl sm:text-5xl font-black leading-tight mt-3">
+          Yaşam hakkı <br/> pazarlık konusu değildir.
+        </h2>
+        <p class="mt-5 text-[#8A7B6F] leading-relaxed text-lg">
+          Hayvan hakları bizim için yalnızca merhamet meselesi değildir; bu bir adalet meselesidir.
+          Şiddetin, ihmalin ve sessiz bırakılan her canın karşısında duruyoruz.
+        </p>
+        <div class="mt-8 flex flex-wrap gap-4">
+          <a href="/manifesto" class="btn-accent">Manifestoyu Oku</a>
+          <a href="/hakkimizda" class="btn-outline">Hakkımızda</a>
+        </div>
+      </div>
+    </div>
+  </section>
 
 </BaseLayout>

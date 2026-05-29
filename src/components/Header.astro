@@ -1,14 +1,101 @@
-<header class="border-b border-zinc-800 bg-zinc-950/90">
-    <nav class="mx-auto flex max-w-7xl items-center justify-between px-6 py-5">
-        <a href="/" class="text-lg font-bold tracking-wide">
-            Hayvan Hakları Platformu
-        </a>
+---
+const currentPath = Astro.url.pathname;
+const links = [
+  { href: "/",           label: "Ana Sayfa" },
+  { href: "/manifesto",  label: "Manifesto" },
+  { href: "/haberler",   label: "Haberler" },
+  { href: "/hakkimizda", label: "Hakkımızda" },
+  { href: "/iletisim",   label: "İletişim" },
+];
+---
 
-        <div class="hidden gap-6 text-sm text-zinc-300 md:flex">
-            <a href="/manifesto" class="hover:text-white">Manifesto</a>
-            <a href="/haberler" class="hover:text-white">Haberler</a>
-            <a href="/hakkimizda" class="hover:text-white">Hakkımızda</a>
-            <a href="/information" class="hover:text-white">İletişim</a>
+<header class="sticky top-0 z-50 bg-[#D4856E]/92 backdrop-blur-md border-b border-[#E8DDD2] shadow-sm">
+  <div class="mx-auto max-w-7xl px-5 sm:px-8">
+    <div class="flex h-16 items-center justify-between">
+
+      <!-- Logo -->
+      <a href="/" class="flex items-center gap-3 group">
+        <div class="w-9 h-9 rounded-xl bg-[#1C1814] flex items-center justify-center flex-shrink-0 group-hover:bg-[#B5634B] transition-colors duration-200">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+          </svg>
         </div>
-    </nav>
+        <div class="leading-tight">
+          <span class="font-black text-[#1C1814] text-sm sm:text-base tracking-tight">Hayvan Hakları</span>
+          <span class="hidden sm:block text-xs text-[#8A7B6F] font-medium -mt-0.5">Türkiye Platformu</span>
+        </div>
+      </a>
+
+      <!-- Desktop Nav -->
+      <nav class="hidden md:flex items-center gap-1">
+        {links.map(link => (
+          <a
+            href={link.href}
+            class={`nav-link px-4 py-2 rounded-lg text-sm transition-all
+              ${currentPath === link.href
+                ? 'active text-[#1C1814] font-bold bg-[#6B5E55]'
+                : 'text-[#6B5E55] hover:bg-[#6B5E55] hover:text-[#1C1814]'}`}
+          >
+            {link.label}
+          </a>
+        ))}
+      </nav>
+
+      <!-- CTA + Hamburger -->
+      <div class="flex items-center gap-3">
+        <a href="/iletisim" class="hidden sm:inline-flex btn-accent text-sm py-2 px-5">
+          Bize Ulaş
+        </a>
+        <button
+          id="menu-toggle"
+          class="md:hidden flex flex-col gap-1.5 w-9 h-9 items-center justify-center rounded-lg hover:bg-[#F5EFE6] transition-colors"
+          aria-label="Menüyü aç"
+        >
+          <span class="w-5 h-0.5 bg-[#6B5E55] rounded-full block transition-all" id="bar1"></span>
+          <span class="w-5 h-0.5 bg-[#6B5E55] rounded-full block transition-all" id="bar2"></span>
+          <span class="w-4 h-0.5 bg-[#6B5E55] rounded-full block transition-all" id="bar3"></span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile Menu -->
+  <div id="mobile-menu" class="md:hidden flex-col bg-[#FDF9F3] border-t border-[#E8DDD2] px-5 pb-5 pt-3 gap-1 shadow-lg">
+    {links.map(link => (
+      <a
+        href={link.href}
+        class={`block px-4 py-3 rounded-xl text-sm font-medium transition-colors
+          ${currentPath === link.href
+            ? 'bg-[#1C1814] text-white'
+            : 'text-[#6B5E55] hover:bg-[#F5EFE6]'}`}
+      >
+        {link.label}
+      </a>
+    ))}
+    <a href="/iletisim" class="mt-2 block text-center btn-accent text-sm py-3">
+      Bize Ulaş
+    </a>
+  </div>
 </header>
+
+<script>
+  const toggle = document.getElementById('menu-toggle');
+  const menu   = document.getElementById('mobile-menu');
+  const bar1   = document.getElementById('bar1');
+  const bar2   = document.getElementById('bar2');
+  const bar3   = document.getElementById('bar3');
+  toggle?.addEventListener('click', () => {
+    const isOpen = menu?.classList.toggle('open');
+    if (isOpen) {
+      bar1!.style.transform = 'translateY(8px) rotate(45deg)';
+      bar2!.style.opacity   = '0';
+      bar3!.style.transform = 'translateY(-8px) rotate(-45deg)';
+      bar3!.style.width     = '20px';
+    } else {
+      bar1!.style.transform = '';
+      bar2!.style.opacity   = '1';
+      bar3!.style.transform = '';
+      bar3!.style.width     = '';
+    }
+  });
+</script>

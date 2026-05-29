@@ -1,1 +1,132 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
 @import "tailwindcss";
+
+:root {
+  --color-primary:      #1C1814;
+  --color-accent:       #8A7B6F;
+  --color-accent-light: #F5EFE6;
+  --color-green:        #fffff4;
+  --color-surface:      #B5634B;
+  --color-surface-2:    #D4856E;
+  --color-muted:        #8A7B6F;
+  --color-border:       #E8DDD2;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background: var(--color-surface);
+  color: var(--color-primary);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── NAV LINKS ─────────────────────────────────────── */
+.nav-link {
+  position: relative;
+  font-weight: 500;
+  color: #6B5E55;
+  transition: color 0.2s;
+}
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: -4px; left: 0;
+  width: 0; height: 2px;
+  background: var(--color-accent);
+  transition: width 0.25s;
+}
+.nav-link:hover { color: var(--color-primary); }
+.nav-link:hover::after { width: 100%; }
+.nav-link.active { color: var(--color-primary); font-weight: 700; }
+.nav-link.active::after { width: 100%; }
+
+/* ── BUTTONS ───────────────────────────────────────── */
+.btn-primary {
+  display: inline-flex; align-items: center; gap: .5rem;
+  background: var(--color-primary); color: #fff;
+  padding: .75rem 1.75rem; border-radius: 9999px;
+  font-weight: 600; font-size: .95rem;
+  transition: background .2s, transform .15s;
+}
+.btn-primary:hover { background: #2e2520; transform: translateY(-1px); }
+
+.btn-accent {
+  display: inline-flex; align-items: center; gap: .5rem;
+  background: var(--color-accent); color: #fff;
+  padding: .75rem 1.75rem; border-radius: 9999px;
+  font-weight: 600; font-size: .95rem;
+  transition: background .2s, transform .15s;
+}
+.btn-accent:hover { background: #8A7B6F; transform: translateY(-1px); }
+
+.btn-green {
+  display: inline-flex; align-items: center; gap: .5rem;
+  background: var(--color-green); color: #fff;
+  padding: .75rem 1.75rem; border-radius: 9999px;
+  font-weight: 600; font-size: .95rem;
+  transition: background .2s, transform .15s;
+}
+.btn-green:hover { background: #4a6650; transform: translateY(-1px); }
+
+.btn-outline {
+  display: inline-flex; align-items: center; gap: .5rem;
+  border: 2px solid rgba(255,255,255,.45); color: #fff;
+  padding: .75rem 1.75rem; border-radius: 9999px;
+  font-weight: 600; font-size: .95rem;
+  backdrop-filter: blur(8px);
+  background: rgba(255,255,255,.08);
+  transition: background .2s, border-color .2s;
+}
+.btn-outline:hover {
+  background: rgba(255,255,255,.16);
+  border-color: rgba(255,255,255,.7);
+}
+
+/* ── CARDS ─────────────────────────────────────────── */
+.card {
+  background: #fff;
+  border-radius: 1.5rem;
+  border: 1px solid var(--color-border);
+  overflow: hidden;
+  transition: box-shadow .25s, transform .25s;
+}
+.card:hover {
+  box-shadow: 0 20px 40px rgba(28,24,20,.08);
+  transform: translateY(-4px);
+}
+
+/* ── TYPOGRAPHY HELPERS ────────────────────────────── */
+.section-label {
+  display: inline-block;
+  font-size: .75rem; font-weight: 700;
+  letter-spacing: .15em; text-transform: uppercase;
+  color: var(--color-accent);
+  margin-bottom: 1rem;
+}
+.section-title {
+  font-size: clamp(1.9rem, 4vw, 3rem);
+  font-weight: 900; line-height: 1.15;
+  color: var(--color-primary);
+}
+.prose-content p {
+  color: #6B5E55;
+  line-height: 1.9; font-size: 1.05rem;
+  margin-bottom: 1.5rem;
+}
+
+/* ── MOBILE MENU ───────────────────────────────────── */
+#mobile-menu { display: none; }
+#mobile-menu.open { display: flex; }
+
+/* ── ANIMATIONS ────────────────────────────────────── */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.animate-fadeInUp { animation: fadeInUp .65s ease forwards; }
+.delay-1 { animation-delay: .1s;  opacity: 0; }
+.delay-2 { animation-delay: .22s; opacity: 0; }
+.delay-3 { animation-delay: .36s; opacity: 0; }
+.delay-4 { animation-delay: .5s;  opacity: 0; }

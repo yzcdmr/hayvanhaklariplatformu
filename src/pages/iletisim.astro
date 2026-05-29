@@ -1,0 +1,146 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout title="İletişim | Hayvan Hakları Platformu">
+
+  <!-- Header -->
+  <section class="bg-[#1C1814] text-white pt-16 pb-24 relative overflow-hidden">
+    <div class="absolute inset-0 opacity-10">
+      <div class="absolute top-0 right-0 w-96 h-96 bg-[#5C7A5E] rounded-full blur-3xl"></div>
+    </div>
+    <div class="relative z-10 mx-auto max-w-7xl px-5 sm:px-8">
+      <span class="section-label">İletişim</span>
+      <h1 class="section-title text-white mt-3">Bizimle İletişime Geçin.</h1>
+      <p class="mt-4 text-[#8A7B6F] max-w-lg">
+        Haber, iş birliği, gönüllülük veya platformla ilgili her konuda bize ulaşabilirsiniz.
+      </p>
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-7xl px-5 sm:px-8 py-16">
+    <div class="grid gap-8 lg:grid-cols-3">
+
+      <!-- Info Cards -->
+      <div class="space-y-6">
+
+        <div class="bg-white rounded-2xl border border-[#E8DDD2] p-6">
+          <div class="w-10 h-10 bg-[#F5EFE6] rounded-xl flex items-center justify-center text-xl mb-4">✉️</div>
+          <h3 class="font-black text-[#1C1814] mb-2">E-posta</h3>
+          <p class="text-sm text-[#8A7B6F] mb-3">Genel iletişim, haber ipuçları ve iş birlikleri için:</p>
+          <a href="mailto:hayvanhaklariplatformuturkiye@gmail.com"
+             class="text-sm font-bold text-[#1C1814] hover:text-[#B5634B] transition-colors break-all">
+            hayvanhaklariplatformuturkiye@gmail.com
+          </a>
+        </div>
+
+        <div class="bg-[#1C1814] text-white rounded-2xl p-6">
+          <div class="w-10 h-10 bg-white/10 rounded-xl flex items-center justify-center text-xl mb-4">📱</div>
+          <h3 class="font-black mb-2">Sosyal Medya</h3>
+          <p class="text-sm text-[#8A7B6F] mb-5">Güncel haberler için bizi takip edin.</p>
+          <div class="space-y-3">
+            <a href="https://www.instagram.com/hayvanhaklariplatformuturkiye/" target="_blank" rel="noopener"
+               class="flex items-center gap-3 text-sm font-semibold hover:text-[#D4856E] transition-colors group">
+              <span class="w-8 h-8 bg-white/10 group-hover:bg-[#B5634B] rounded-lg flex items-center justify-center transition-colors">↗</span>
+              Instagram
+            </a>
+            <a href="https://x.com/HayvanHTP" target="_blank" rel="noopener"
+               class="flex items-center gap-3 text-sm font-semibold hover:text-[#D4856E] transition-colors group">
+              <span class="w-8 h-8 bg-white/10 group-hover:bg-[#B5634B] rounded-lg flex items-center justify-center transition-colors text-xs font-bold">𝕏</span>
+              X / Twitter
+            </a>
+            <a href="https://www.youtube.com/@HAYVANHAKLARIT%C3%9CRK%C4%B0YEPLATFORMU/featured" target="_blank" rel="noopener"
+               class="flex items-center gap-3 text-sm font-semibold hover:text-[#D4856E] transition-colors group">
+              <span class="w-8 h-8 bg-white/10 group-hover:bg-[#B5634B] rounded-lg flex items-center justify-center transition-colors">↗</span>
+              YouTube
+            </a>
+          </div>
+        </div>
+
+        <div class="bg-amber-50 border border-amber-200 rounded-2xl p-6">
+          <div class="flex items-start gap-3">
+            <span class="text-amber-500 text-xl mt-0.5">⚠️</span>
+            <div>
+              <h3 class="font-bold text-amber-900 mb-1">Önemli Not</h3>
+              <p class="text-sm text-amber-800 leading-relaxed">
+                Bu platform haber ve farkındalık yayını yapmaktadır. Acil kurtarma için belediye
+                veya Tarım ve Orman İl/İlçe Müdürlüğü ile iletişime geçiniz.
+              </p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Form -->
+      <div class="lg:col-span-2">
+        <div class="bg-white rounded-2xl border border-[#E8DDD2] p-8">
+          <h2 class="text-2xl font-black text-[#1C1814] mb-2">Mesaj Gönderin</h2>
+          <p class="text-[#8A7B6F] text-sm mb-8">En kısa sürede size geri dönüş yapacağız.</p>
+
+          <form class="space-y-5" id="contact-form">
+            <div class="grid gap-5 sm:grid-cols-2">
+              <div>
+                <label class="block text-sm font-semibold text-[#6B5E55] mb-2" for="name">Adınız</label>
+                <input type="text" id="name" placeholder="Ad Soyad" required
+                  class="w-full rounded-xl border border-[#E8DDD2] bg-[#FDF9F3] px-4 py-3 text-sm text-[#1C1814] placeholder-[#C4B5AB] focus:outline-none focus:ring-2 focus:ring-[#B5634B] focus:border-transparent transition-all" />
+              </div>
+              <div>
+                <label class="block text-sm font-semibold text-[#6B5E55] mb-2" for="email">E-posta</label>
+                <input type="email" id="email" placeholder="ornek@email.com" required
+                  class="w-full rounded-xl border border-[#E8DDD2] bg-[#FDF9F3] px-4 py-3 text-sm text-[#1C1814] placeholder-[#C4B5AB] focus:outline-none focus:ring-2 focus:ring-[#B5634B] focus:border-transparent transition-all" />
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-sm font-semibold text-[#6B5E55] mb-2" for="subject">Konu</label>
+              <select id="subject"
+                class="w-full rounded-xl border border-[#E8DDD2] bg-[#FDF9F3] px-4 py-3 text-sm text-[#1C1814] focus:outline-none focus:ring-2 focus:ring-[#B5634B] focus:border-transparent transition-all">
+                <option value="">Konu seçin...</option>
+                <option value="haber">Haber İpucu</option>
+                <option value="isbirligi">İş Birliği Teklifi</option>
+                <option value="gonullu">Gönüllülük</option>
+                <option value="basin">Basın & Medya</option>
+                <option value="diger">Diğer</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-sm font-semibold text-[#6B5E55] mb-2" for="message">Mesajınız</label>
+              <textarea id="message" rows="6" placeholder="Mesajınızı buraya yazın..." required
+                class="w-full rounded-xl border border-[#E8DDD2] bg-[#FDF9F3] px-4 py-3 text-sm text-[#1C1814] placeholder-[#C4B5AB] focus:outline-none focus:ring-2 focus:ring-[#B5634B] focus:border-transparent transition-all resize-none"></textarea>
+            </div>
+
+            <button type="submit" id="submit-btn" class="w-full btn-accent justify-center py-4 text-base">
+              Mesajı Gönder
+            </button>
+
+            <div id="form-success" class="hidden bg-[#5C7A5E]/10 border border-[#5C7A5E]/30 rounded-xl px-5 py-4 text-sm text-[#5C7A5E] font-medium">
+              ✅ Mesajınız alındı! En kısa sürede geri dönüş yapacağız.
+            </div>
+          </form>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+</BaseLayout>
+
+<script>
+  const form       = document.getElementById('contact-form') as HTMLFormElement;
+  const submitBtn  = document.getElementById('submit-btn')   as HTMLButtonElement;
+  const successMsg = document.getElementById('form-success');
+  form?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    submitBtn.textContent = 'Gönderiliyor...';
+    submitBtn.disabled = true;
+    setTimeout(() => {
+      form.reset();
+      submitBtn.textContent = 'Mesajı Gönder';
+      submitBtn.disabled = false;
+      successMsg?.classList.remove('hidden');
+      setTimeout(() => successMsg?.classList.add('hidden'), 5000);
+    }, 1200);
+  });
+</script>

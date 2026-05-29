@@ -1,47 +1,94 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+
+const principles = [
+  { number: "01", title: "Yaşam Hakkı",        body: "Her canlının yaşam hakkı vardır. Bu hak; insana, hayvana, doğaya tanınmış evrensel bir değerdir. Hiçbir ekonomik çıkar, gelenek ya da ihmal bu hakkın önüne geçemez." },
+  { number: "02", title: "Acısızlık ve Onur",  body: "Hayvanlar acı duyar, korkar, sevinir. Onların bu deneyimleri insanınkinden farklı bir değer taşımaz. Her canlının onurlu ve acısız bir yaşam sürme hakkı tartışmasızdır." },
+  { number: "03", title: "Hesap Verebilirlik", body: "Hayvan hakları ihlalleri görünür kılınmalı, failleri kamuoyuna hesap vermelidir. Sessizlik suç ortaklığıdır; biz sessiz kalmayacağız." },
+  { number: "04", title: "Bağımsız Gazetecilik", body: "Platformumuz hiçbir siyasi yapıya, kuruma ya da ticari çıkara bağlı değildir. Yayımladığımız her içerik doğrulanmış kaynaklara ve sahadan gelen bilgilere dayanır." },
+];
 ---
 
 <BaseLayout title="Manifesto | Hayvan Hakları Platformu">
-    <main class="mx-auto max-w-4xl px-6 py-20">
-        <p class="mb-4 text-sm font-semibold uppercase tracking-[0.35em] text-red-500">
-            Manifesto
-        </p>
 
-        <h1 class="text-4xl font-black leading-tight md:text-6xl">
-            Yaşam hakkı pazarlık konusu değildir.
-        </h1>
+  <!-- Hero -->
+  <section class="bg-[#1C1814] text-white pt-20 pb-28 relative overflow-hidden">
+    <div class="absolute inset-0 opacity-10 pointer-events-none">
+      <div class="absolute top-10 left-10 w-96 h-96 bg-[#B5634B] rounded-full blur-3xl"></div>
+      <div class="absolute bottom-0 right-0 w-80 h-80 bg-[#5C7A5E] rounded-full blur-3xl"></div>
+    </div>
+    <div class="relative z-10 mx-auto max-w-4xl px-5 sm:px-8">
+      <span class="section-label text-[#D4856E]">Manifestomuz</span>
+      <h1 class="text-5xl sm:text-6xl lg:text-7xl font-black leading-tight mt-4">
+        Yaşam hakkı<br/>
+        <span class="text-[#D4856E]">pazarlık konusu</span><br/>
+        değildir.
+      </h1>
+      <p class="mt-8 text-xl text-[#C4B5AB] leading-relaxed max-w-2xl">
+        Biz, yaşam hakkının yalnızca insana ait olmadığını savunan bağımsız bir farkındalık platformuyuz.
+      </p>
+    </div>
+  </section>
 
-        <div class="mt-10 space-y-7 text-lg leading-8 text-zinc-300">
-            <p>
-                Biz, yaşam hakkının yalnızca insana ait olmadığını savunan bağımsız bir
-                farkındalık platformuyuz.
-            </p>
+  <section class="mx-auto max-w-4xl px-5 sm:px-8 py-20">
 
-            <p>
-                Sokakta, barınakta, ormanda ve insanın temas ettiği her yerde hayvanların
-                güvenli, sağlıklı ve onurlu bir yaşam sürme hakkı vardır.
-            </p>
+    <!-- Opening -->
+    <div class="bg-[#F5EFE6] border-l-4 border-[#B5634B] rounded-r-2xl px-8 py-7 mb-16">
+      <p class="text-xl font-semibold text-[#1C1814] leading-relaxed">
+        Sokakta, barınakta, ormanda ve insanın temas ettiği her yerde hayvanların
+        güvenli, sağlıklı ve onurlu bir yaşam sürme hakkı vardır.
+      </p>
+    </div>
 
-            <p>
-                Hayvan hakları bizim için yalnızca merhamet meselesi değildir; bu bir
-                adalet meselesidir.
-            </p>
-
-            <p>
-                Şiddetin, ihmalin, kötü muamelenin ve sessiz bırakılan her canın
-                karşısında duruyoruz.
-            </p>
-
-            <p>
-                Amacımız kavga büyütmek değil; gerçeği görünür kılmak, kamuoyunu
-                bilgilendirmek ve ilgili kurumları sorumluluğa davet etmektir.
-            </p>
-
-            <p class="border-l-4 border-red-600 pl-6 text-xl font-semibold text-white">
-                Biz tarafız. Yaşamdan, adaletten, vicdandan ve sessiz bırakılan
-                canlardan tarafız.
-            </p>
+    <!-- Principles -->
+    <div class="grid gap-8 sm:grid-cols-2 mb-16">
+      {principles.map(p => (
+        <div class="bg-white rounded-2xl border border-[#E8DDD2] p-8 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+          <span class="text-5xl font-black text-[#F5EFE6] block mb-4 leading-none">{p.number}</span>
+          <h3 class="text-xl font-black text-[#1C1814] mb-3">{p.title}</h3>
+          <p class="text-[#6B5E55] leading-relaxed">{p.body}</p>
         </div>
-    </main>
+      ))}
+    </div>
+
+    <!-- Prose -->
+    <div class="prose-content space-y-6">
+      <h2 class="text-3xl font-black text-[#1C1814]">Neden Buradayız?</h2>
+      <p>
+        Hayvan hakları ihlalleri Türkiye'de ve dünyada her gün yaşanmakta; ancak büyük çoğunluğu
+        kamuoyuna yansımadan, failleri hesap vermeden geçip gitmektedir. Anaakım medyanın yeterince
+        yer vermediği bu ihlalleri kayıt altına almak, belgelemek ve kamuoyuyla paylaşmak için
+        bu platformu kurduk.
+      </p>
+      <p>
+        Amacımız kavga büyütmek değildir. Gerçeği görünür kılmak, kamuoyunu bilgilendirmek ve
+        ilgili kurumları sorumluluğa davet etmektir. Eleştirilerimiz kişilere değil, sistematik
+        ihlallere ve yapısal sorunlara yöneliktir.
+      </p>
+      <p>
+        Hayvan hakları yalnızca köpek ve kedileri kapsamaz. Çiftlik hayvanları, yaban hayvanları,
+        deniz canlıları yaşayan her canlı bu davanın kapsamındadır.
+      </p>
+
+      <div class="bg-[#1C1814] text-white rounded-3xl px-10 py-10 my-12">
+        <p class="text-2xl font-bold leading-relaxed">
+          "Biz tarafız. Yaşamdan, adaletten, vicdandan
+          ve sessiz bırakılan canlardan tarafız."
+        </p>
+        <p class="mt-4 text-[#8A7B6F] text-sm">— Hayvan Hakları Türkiye Platformu</p>
+      </div>
+
+      <p>
+        Platformumuz gönüllü gazetecilerden, aktivistlerden ve veterinerlerden oluşmaktadır.
+        Hiçbir siyasi ya da ticari bağımız yoktur. Gelirlerimiz yalnızca okuyucu bağışlarından
+        ve kültürel etkinlik ortaklıklarından karşılanmaktadır.
+      </p>
+    </div>
+
+    <div class="mt-16 flex flex-wrap gap-4">
+      <a href="/haberler" class="btn-accent">Son Haberlere Git</a>
+      <a href="/iletisim" class="btn-primary">Bizimle İletişime Geç</a>
+    </div>
+
+  </section>
 </BaseLayout>

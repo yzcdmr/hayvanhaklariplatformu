@@ -1,0 +1,175 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const categories = ["Tümü", "Kurtarma", "Mevzuat", "Deniz Canlıları", "Yaban Hayatı", "Kampanya"];
+
+const allNews = [
+  /*{ slug: "istanbul-200-kopek-kurtarildi", category: "Kurtarma",       catCss: "bg-[#5C7A5E]/12 text-[#5C7A5E]",    featured: true,
+    title: "İstanbul'da 200 Sokak Köpeği Güvenli Barınağa Taşındı",
+    excerpt: "Beşiktaş Belediyesi ile yürütülen ortak operasyonda 200'den fazla sokak köpeği rehabilitasyon merkezine kavuştu. Operasyon, gönüllü veteriner ekiplerinin 3 aylık ön hazırlığı sonucunda hayata geçirildi.",
+    date: "24 Mayıs 2026", readTime: "3 dk", author: "Elif Kaya",
+    image: "https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=800&q=80" },
+
+  { slug: "yesil-kaplumbaga-koruma", category: "Deniz Canlıları", catCss: "bg-blue-100 text-blue-700", featured: false,
+    title: "Yeşil Kaplumbağa Koruma Projesi Akdeniz'e Yayılıyor",
+    excerpt: "WWF Türkiye ortaklığıyla başlatılan proje kapsamında Antalya kıyılarındaki yuvalama alanları koruma altına alındı.",
+    date: "20 Mayıs 2026", readTime: "4 dk", author: "Mert Demir",
+    image: "https://images.unsplash.com/photo-1518020382113-a7e8fc38eac9?w=600&q=80" },
+
+  { slug: "hayvan-haklari-yasa-mecliste", category: "Mevzuat", catCss: "bg-[#B5634B]/10 text-[#B5634B]", featured: false,
+    title: "Hayvan Hakları Yasa Teklifi TBMM Gündemine Taşındı",
+    excerpt: "Birden fazla milletvekili tarafından ortak hazırlanan yasa teklifi canlı hayvan ticaretinde köklü değişiklik öngörüyor.",
+    date: "15 Mayıs 2026", readTime: "5 dk", author: "Selin Arslan",
+    image: "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=600&q=80" },
+
+  { slug: "barinak-kosulları-rapor", category: "Kampanya", catCss: "bg-amber-100 text-amber-700", featured: false,
+    title: "Türkiye'deki Belediye Barınaklarında Koşullar Raporu Yayımlandı",
+    excerpt: "81 ilde 320 barınağı kapsayan araştırma, kapasite sorunları ve personel eksikliğini gün yüzüne çıkardı.",
+    date: "10 Mayıs 2026", readTime: "6 dk", author: "Ahmet Yılmaz",
+    image: "https://images.unsplash.com/photo-1548199973-03cce0bbc87b?w=600&q=80" },
+
+  { slug: "kars-kurtlar-koruma", category: "Yaban Hayatı", catCss: "bg-yellow-100 text-yellow-700", featured: false,
+    title: "Kars Ovasında Kurt Popülasyonu Koruma Altına Alındı",
+    excerpt: "Doğu Anadolu'da çoban köpeklerine yönelik zehirleme vakalarına karşı Çevre Bakanlığı harekete geçti.",
+    date: "5 Mayıs 2026", readTime: "4 dk", author: "Zeynep Çelik",
+    image: "https://images.unsplash.com/photo-1474511320723-9a56873867b5?w=600&q=80" },
+
+  { slug: "izmir-kedi-kolonisi", category: "Kampanya", catCss: "bg-amber-100 text-amber-700", featured: false,
+    title: "İzmir'de 1.500 Kedi Kolonisi Kayıt Altına Alındı",
+    excerpt: "Büyükşehir Belediyesi'nin hayata geçirdiği dijital kedi kolonisi haritası, mamacı gönüllüler için büyük kolaylık sağlıyor.",
+    date: "28 Nisan 2026", readTime: "3 dk", author: "Burak Öztürk",
+    image: "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=600&q=80" },
+
+  { slug: "delfin-ticareti", category: "Deniz Canlıları", catCss: "bg-blue-100 text-blue-700", featured: false,
+    title: "Karadeniz'de Yasadışı Yunus Ticareti Soruşturması",
+    excerpt: "Sosyal medyada paylaşılan görüntüler üzerine başlatılan soruşturma, örgütlü bir yunus kaçakçılığı ağını deşifre etti.",
+    date: "22 Nisan 2026", readTime: "5 dk", author: "Mert Demir",
+    image: "https://images.unsplash.com/photo-1607153333879-c174d265f1d2?w=600&q=80" },
+
+  { slug: "ciftlik-hayvanlari-denetim", category: "Mevzuat", catCss: "bg-[#B5634B]/10 text-[#B5634B]", featured: false,
+    title: "Çiftlik Hayvanları Denetim Yönetmeliği Güncelleniyor",
+    excerpt: "Tarım ve Orman Bakanlığı, AB standartlarına uyum kapsamında çiftlik denetimlerini sıklaştıracağını açıkladı.",
+    date: "17 Nisan 2026", readTime: "4 dk", author: "Selin Arslan",
+    image: "https://images.unsplash.com/photo-1500595046743-cd271d694d30?w=600&q=80" },
+
+  { slug: "gocmen-kus-avciligi", category: "Yaban Hayatı", catCss: "bg-yellow-100 text-yellow-700", featured: false,
+    title: "Göç Döneminde Kuş Avcılığı: 47 Gözaltı",
+    excerpt: "Bahar göçü döneminde yasadışı avcılık yapan 47 kişi Jandarma operasyonlarında gözaltına alındı.",
+    date: "10 Nisan 2026", readTime: "3 dk", author: "Ahmet Yılmaz",
+    image: "https://images.unsplash.com/photo-1444464666168-49d633b86797?w=600&q=80" },*/
+];
+
+const featuredNews = allNews.find(n => n.featured);
+const regularNews  = allNews.filter(n => !n.featured);
+---
+
+<BaseLayout title="Haberler | Hayvan Hakları Platformu">
+
+  <!-- Header -->
+  <section class="bg-[#1C1814] text-white pt-16 pb-20 relative overflow-hidden">
+    <div class="absolute inset-0 opacity-10">
+      <div class="absolute top-0 right-0 w-96 h-96 bg-[#B5634B] rounded-full blur-3xl"></div>
+    </div>
+    <div class="relative z-10 mx-auto max-w-7xl px-5 sm:px-8">
+      <span class="section-label text-[#FDF9F3]">Haber Merkezi</span>
+      <h1 class="section-title text-white mt-3">Son Gelişmeler</h1>
+      <p class="mt-4 text-white/60 max-w-lg">
+        Türkiye ve dünyadan hayvan hakları gündemi. Kurtarma operasyonlarından mevzuat haberlerine kadar.
+      </p>
+    </div>
+  </section>
+
+  <!-- Category Filters -->
+  <div class="sticky top-16 z-40 bg-[#FDF9F3] border-b border-[#E8DDD2] shadow-sm">
+    <div class="mx-auto max-w-7xl px-5 sm:px-8 overflow-x-auto">
+      <div class="flex gap-2 py-3 min-w-max">
+        {categories.map((cat, i) => (
+          <button
+            class={`category-filter px-4 py-2 rounded-full text-sm font-semibold transition-all
+              ${i === 0 ? 'bg-[#1C1814] text-white' : 'bg-[#F5EFE6] text-[#6B5E55] hover:bg-[#E8DDD2]'}`}
+            data-category={cat}
+          >
+            {cat}
+          </button>
+        ))}
+      </div>
+    </div>
+  </div>
+
+  <div class="mx-auto max-w-7xl px-5 sm:px-8 py-12">
+
+    <!-- Featured -->
+    {featuredNews && (
+      <article class="mb-12 group">
+        <a href={`/haberler/${featuredNews.slug}`}
+           class="grid lg:grid-cols-2 gap-0 rounded-3xl overflow-hidden border border-[#E8DDD2] bg-white hover:shadow-2xl transition-shadow duration-300">
+          <div class="overflow-hidden h-72 lg:h-auto">
+            <img src={featuredNews.image} alt={featuredNews.title}
+                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+          </div>
+          <div class="p-8 sm:p-12 flex flex-col justify-center">
+            <div class="flex items-center gap-3 mb-4">
+              <span class="bg-[#B5634B] text-white text-xs font-bold px-3 py-1 rounded-full">Öne Çıkan</span>
+              <span class={`text-xs font-bold px-3 py-1 rounded-full ${featuredNews.catCss}`}>{featuredNews.category}</span>
+            </div>
+            <h2 class="text-2xl sm:text-3xl font-black text-[#1C1814] leading-snug group-hover:text-[#B5634B] transition-colors">
+              {featuredNews.title}
+            </h2>
+            <p class="mt-4 text-[#6B5E55] leading-relaxed">{featuredNews.excerpt}</p>
+            <div class="mt-6 flex items-center justify-between text-sm text-amber-100">
+              <span>✍️ {featuredNews.author} · {featuredNews.date}</span>
+              <span class="font-semibold text-[#B5634B]">{featuredNews.readTime} okuma</span>
+            </div>
+          </div>
+        </a>
+      </article>
+    )}
+
+    <!-- Grid -->
+    <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3" id="news-grid">
+      {regularNews.map(item => (
+        <article class="card group" data-category={item.category}>
+          <div class="overflow-hidden h-48">
+            <img src={item.image} alt={item.title}
+                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+          </div>
+          <div class="p-6">
+            <div class="flex items-center justify-between mb-3">
+              <span class={`text-xs font-bold px-3 py-1 rounded-full ${item.catCss}`}>{item.category}</span>
+              <span class="text-xs text-[text-amber-100]">{item.readTime}</span>
+            </div>
+            <h3 class="font-bold text-base leading-snug text-[#1C1814] group-hover:text-[#B5634B] transition-colors">
+              {item.title}
+            </h3>
+            <p class="mt-2 text-sm text-[#8A7B6F] leading-relaxed line-clamp-2">{item.excerpt}</p>
+            <div class="mt-4 pt-4 border-t border-[#F5EFE6] flex items-center justify-between text-xs text-[text-amber-100]">
+              <span>{item.author} · {item.date}</span>
+              <a href={`/haberler/${item.slug}`} class="font-semibold text-[#B5634B] hover:underline">Oku →</a>
+            </div>
+          </div>
+        </article>
+      ))}
+    </div>
+
+  </div>
+</BaseLayout>
+
+<script>
+  const buttons  = document.querySelectorAll<HTMLButtonElement>('.category-filter');
+  const articles = document.querySelectorAll<HTMLElement>('#news-grid article');
+
+  buttons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const cat = btn.dataset.category;
+      buttons.forEach(b => {
+        b.classList.remove('bg-[#1C1814]', 'text-white');
+        b.classList.add('bg-[#F5EFE6]', 'text-[#6B5E55]');
+      });
+      btn.classList.add('bg-[#1C1814]', 'text-white');
+      btn.classList.remove('bg-[#F5EFE6]', 'text-[#6B5E55]');
+      articles.forEach(a => {
+        a.style.display = (cat === 'Tümü' || a.dataset.category === cat) ? '' : 'none';
+      });
+    });
+  });
+</script>
