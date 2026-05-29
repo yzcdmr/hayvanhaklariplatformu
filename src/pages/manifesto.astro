@@ -1,94 +1,135 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 
-const principles = [
-  { number: "01", title: "Yaşam Hakkı",        body: "Her canlının yaşam hakkı vardır. Bu hak; insana, hayvana, doğaya tanınmış evrensel bir değerdir. Hiçbir ekonomik çıkar, gelenek ya da ihmal bu hakkın önüne geçemez." },
-  { number: "02", title: "Acısızlık ve Onur",  body: "Hayvanlar acı duyar, korkar, sevinir. Onların bu deneyimleri insanınkinden farklı bir değer taşımaz. Her canlının onurlu ve acısız bir yaşam sürme hakkı tartışmasızdır." },
-  { number: "03", title: "Hesap Verebilirlik", body: "Hayvan hakları ihlalleri görünür kılınmalı, failleri kamuoyuna hesap vermelidir. Sessizlik suç ortaklığıdır; biz sessiz kalmayacağız." },
-  { number: "04", title: "Bağımsız Gazetecilik", body: "Platformumuz hiçbir siyasi yapıya, kuruma ya da ticari çıkara bağlı değildir. Yayımladığımız her içerik doğrulanmış kaynaklara ve sahadan gelen bilgilere dayanır." },
+const steps = [
+  {
+    number: "01",
+    image: "/images/ManifestoStep1.jpeg",
+    title: "Hukuki Meşruiyet ve Evrensel Standartlar",
+    lead: "Gücünü kurumsal hiyerarşilerden, dernekleşme bürokrasisinden veya dönemsel siyasi ajandalardan değil; tamamen Anayasal normlardan, gönüllülük esasından ve uluslararası hukuk metinlerinden alan bağımsız, rasyonel bir irade.",
+    body: [
+      'Hayvan Hakları Platformu Türkiye, sokakta yaşayan canlıların varlık hakkını duygusal argümanlarla değil; doğrudan "Yaşam Hakkı" ve "Hukukun Üstünlüğü" ilkeleriyle savunan rasyonel bir sivil toplum hareketidir.',
+      "Bizler, esneyebilir vicdani tanımları ve lütuf mekanizmalarını tamamen reddediyoruz. Canlıların varoluşsal hakları, bireylerin veya otoritelerin keyfi inisiyatifine bırakılamayacak kadar net bir Anayasal haktır.",
+    ],
+  },
+  {
+    number: "02",
+    image: "/images/ManifestoStep2.jpeg",
+    title: "Bilimsel Veriye Dayalı Rasyonellik",
+    lead: "Toplumsal korkulardan beslenen manipülatif algı yönetimlerinin karşısındaki tek meşru barikatımız veridir.",
+    body: [
+      "Aktivizmimiz, anlık duygusal tepkilerle değil, derinlemesine analiz edilmiş verilerle hareket eder. Bilgi kirliliği ve dezenformasyonla mücadele, evrensel sivil toplum anlayışımızın temel taşıdır.",
+      "PLATFORMUMUZ; Dünya Sağlık Örgütü (WHO) ve Dünya Hayvan Sağlığı Örgütü (WOAH) başta olmak üzere Tarım ve Orman Bakanlığı ile Sağlık Bakanlığı'nın resmi bütçe verilerini, kamu sağlığı istatistiklerini ve devletimizin entegre olduğu uluslararası teknik mevzuat standartlarını titizlikle analiz eder.",
+      "Popülist söylemlerin, panellerde üretilen manipülatif iddiaların veya kişisel duyguların ötesine geçerek; manipülasyondan uzak, bilimsel olarak doğrulanmış, sürdürülebilir kamu yönetimi ve popülasyon modelleri üretiriz. Karar alma süreçlerimizin yegane rehberi rasyonel akıl, resmi bakanlık istatistikleri ve kanıtlanmış bilimsel verilerdir.",
+    ],
+  },
+  {
+    number: "03",
+    image: "/images/ManifestoStep3.jpeg",
+    title: "Sahada Yapısal Denetim ve Uygulama",
+    lead: "Sadece teoride kalmıyoruz; sahada başarısı kanıtlanmış somut modelleri referans alıyoruz.",
+    body: [
+      "Teorik argümanlar ve veri analizi, sahada karşılığı olan pratik, denetlenebilir ve sürdürülebilir modellerle birleştiğinde operasyonel güce dönüşür.",
+      'Bağımsız barınak denetimleri, teknik ve tıbbi standartların optimizasyonu ve yerel yönetimlerin şeffaflığı için geliştirdiğimiz "Edirne Modeli" yol haritası, bu yapısal yaklaşımın somut bir kanıtıdır.',
+      "Bürokratik engellerin ve duygusal karmaşaların ötesine geçerek, hukuka ve bilime uygun yerel çözümleri organize eder, bu modellerin Türkiye sathına yayılması için çalışırız. Her ilde, denetlenebilir ve etkin bir operasyonel mekanizma kurmayı hedefleriz.",
+    ],
+  },
+  {
+    number: "04",
+    image: "/images/ManifestoStep4.jpeg",
+    title: "Evrensel Çağrı",
+    lead: "Biz, adaleti herkes ve her canlı için evrensel standartlarda talep eden bağımsız bir iradeyiz.",
+    body: [
+      "PLATFORMUMUZ; kent güvenliğini, halk sağlığını ve canlıların en temel hakkını bir bütün olarak ele alan ortak aklın sesidir.",
+      "Kişisel görüşlere, dönemsel uzlaşılara veya keyfi yönetim mekanizmalarına göre değişmeyen, sarsılmaz bir evrensel adalet anlayışını savunuyoruz. Popülist yaklaşımların karşısında; bilimin, hukukun ve organize gönüllü gücünün yanındayız.",
+      "Bizler, bu hakkı lütuf dilenerek ya da masalarda pazarlık yaparak değil; hukukla, bilimle ve organize gönüllü gücüyle sonuna kadar koruyoruz. Bu sayfa, tavizsiz adaleti her canlı için talep edenlerin küresel buluşma noktasıdır.",
+    ],
+  },
 ];
 ---
 
-<BaseLayout title="Manifesto | Hayvan Hakları Platformu">
+<BaseLayout title="Manifesto | Hayvan Hakları Platformu" description="Yaşam hakkı pazarlık konusu değildir. Hayvan Hakları Türkiye Platformu manifestosu.">
 
-  <!-- Hero -->
+  <!-- HERO -->
   <section class="bg-[#1C1814] text-white pt-20 pb-28 relative overflow-hidden">
     <div class="absolute inset-0 opacity-10 pointer-events-none">
       <div class="absolute top-10 left-10 w-96 h-96 bg-[#B5634B] rounded-full blur-3xl"></div>
       <div class="absolute bottom-0 right-0 w-80 h-80 bg-[#5C7A5E] rounded-full blur-3xl"></div>
     </div>
     <div class="relative z-10 mx-auto max-w-4xl px-5 sm:px-8">
-      <span class="section-label text-[#D4856E]">Manifestomuz</span>
-      <h1 class="text-5xl sm:text-6xl lg:text-7xl font-black leading-tight mt-4">
+      <span class="section-label">Manifestomuz</span>
+      <h1 class="text-5xl sm:text-6xl lg:text-7xl font-black leading-tight mt-4 text-white">
         Yaşam hakkı<br/>
         <span class="text-[#D4856E]">pazarlık konusu</span><br/>
         değildir.
       </h1>
       <p class="mt-8 text-xl text-[#C4B5AB] leading-relaxed max-w-2xl">
         Biz, yaşam hakkının yalnızca insana ait olmadığını savunan bağımsız bir farkındalık platformuyuz.
+        Şiddetin, ihmalin ve sessiz bırakılan her canın karşısında duruyoruz.
       </p>
     </div>
   </section>
 
-  <section class="mx-auto max-w-4xl px-5 sm:px-8 py-20">
+  <!-- 4 STEPS -->
+  <section class="mx-auto max-w-5xl px-5 sm:px-8 py-16 space-y-24">
 
-    <!-- Opening -->
-    <div class="bg-[#F5EFE6] border-l-4 border-[#B5634B] rounded-r-2xl px-8 py-7 mb-16">
-      <p class="text-xl font-semibold text-[#1C1814] leading-relaxed">
-        Sokakta, barınakta, ormanda ve insanın temas ettiği her yerde hayvanların
-        güvenli, sağlıklı ve onurlu bir yaşam sürme hakkı vardır.
-      </p>
-    </div>
+    {steps.map((step, i) => (
+      <div class={`flex flex-col gap-10 lg:gap-16 ${i % 2 === 1 ? 'lg:flex-row-reverse' : 'lg:flex-row'} items-center`}>
 
-    <!-- Principles -->
-    <div class="grid gap-8 sm:grid-cols-2 mb-16">
-      {principles.map(p => (
-        <div class="bg-white rounded-2xl border border-[#E8DDD2] p-8 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
-          <span class="text-5xl font-black text-[#F5EFE6] block mb-4 leading-none">{p.number}</span>
-          <h3 class="text-xl font-black text-[#1C1814] mb-3">{p.title}</h3>
-          <p class="text-[#6B5E55] leading-relaxed">{p.body}</p>
+        <!-- Image -->
+        <div class="w-full lg:w-[44%] flex-shrink-0">
+          <div class="relative rounded-3xl overflow-hidden shadow-xl aspect-[4/3]">
+            <img
+              src={step.image}
+              alt={step.title}
+              class="w-full h-full object-cover"
+            />
+            <!-- Step badge -->
+            <div class="absolute top-4 left-4 w-12 h-12 rounded-2xl bg-[#1C1814] flex items-center justify-center shadow-lg">
+              <span class="text-[#D4856E] font-black text-lg leading-none">{step.number}</span>
+            </div>
+          </div>
         </div>
-      ))}
-    </div>
 
-    <!-- Prose -->
-    <div class="prose-content space-y-6">
-      <h2 class="text-3xl font-black text-[#1C1814]">Neden Buradayız?</h2>
-      <p>
-        Hayvan hakları ihlalleri Türkiye'de ve dünyada her gün yaşanmakta; ancak büyük çoğunluğu
-        kamuoyuna yansımadan, failleri hesap vermeden geçip gitmektedir. Anaakım medyanın yeterince
-        yer vermediği bu ihlalleri kayıt altına almak, belgelemek ve kamuoyuyla paylaşmak için
-        bu platformu kurduk.
-      </p>
-      <p>
-        Amacımız kavga büyütmek değildir. Gerçeği görünür kılmak, kamuoyunu bilgilendirmek ve
-        ilgili kurumları sorumluluğa davet etmektir. Eleştirilerimiz kişilere değil, sistematik
-        ihlallere ve yapısal sorunlara yöneliktir.
-      </p>
-      <p>
-        Hayvan hakları yalnızca köpek ve kedileri kapsamaz. Çiftlik hayvanları, yaban hayvanları,
-        deniz canlıları yaşayan her canlı bu davanın kapsamındadır.
-      </p>
+        <!-- Text -->
+        <div class="flex-1 min-w-0">
+          <span class="text-xs font-bold tracking-[0.2em] uppercase text-[#B5634B] mb-3 block">
+            Adım {step.number}
+          </span>
+          <h2 class="text-2xl sm:text-3xl font-black text-[#1C1814] leading-snug mb-5">
+            {step.title}
+          </h2>
+          <p class="text-[#6B5E55] text-lg font-medium leading-relaxed mb-5 border-l-2 border-[#E8DDD2] pl-4 italic">
+            {step.lead}
+          </p>
+          <div class="space-y-4">
+            {step.body.map(para => (
+              <p class="text-[#6B5E55] leading-relaxed">{para}</p>
+            ))}
+          </div>
+        </div>
 
-      <div class="bg-[#1C1814] text-white rounded-3xl px-10 py-10 my-12">
-        <p class="text-2xl font-bold leading-relaxed">
+      </div>
+    ))}
+
+  </section>
+
+  <!-- CLOSING QUOTE -->
+  <section class="mx-auto max-w-4xl px-5 sm:px-8 pb-20">
+    <div class="bg-[#1C1814] text-white rounded-3xl px-10 py-12 relative overflow-hidden">
+      <div class="absolute -top-16 -right-16 w-64 h-64 bg-[#B5634B]/15 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="relative z-10">
+        <p class="text-2xl sm:text-3xl font-black leading-relaxed mb-6">
           "Biz tarafız. Yaşamdan, adaletten, vicdandan
           ve sessiz bırakılan canlardan tarafız."
         </p>
-        <p class="mt-4 text-[#8A7B6F] text-sm">— Hayvan Hakları Türkiye Platformu</p>
+        <p class="text-[#8A7B6F] text-sm">— Hayvan Hakları Türkiye Platformu</p>
+        <div class="mt-8 flex flex-wrap gap-4">
+          <a href="/haberler" class="btn-accent">Son Haberlere Git</a>
+          <a href="/iletisim" class="btn-primary">Bizimle İletişime Geç</a>
+        </div>
       </div>
-
-      <p>
-        Platformumuz gönüllü gazetecilerden, aktivistlerden ve veterinerlerden oluşmaktadır.
-        Hiçbir siyasi ya da ticari bağımız yoktur. Gelirlerimiz yalnızca okuyucu bağışlarından
-        ve kültürel etkinlik ortaklıklarından karşılanmaktadır.
-      </p>
     </div>
-
-    <div class="mt-16 flex flex-wrap gap-4">
-      <a href="/haberler" class="btn-accent">Son Haberlere Git</a>
-      <a href="/iletisim" class="btn-primary">Bizimle İletişime Geç</a>
-    </div>
-
   </section>
+
 </BaseLayout>
