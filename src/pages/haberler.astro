@@ -1,85 +1,29 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+const API_URL = import.meta.env.PUBLIC_API_URL || 'http://localhost:8080';
 
-const categories = ["Tümü", "Kurtarma", "Mevzuat", "Deniz Canlıları", "Yaban Hayatı", "Kampanya"];
-
-const allNews = [
-  /*{ slug: "istanbul-200-kopek-kurtarildi", category: "Kurtarma",       catCss: "bg-[#5C7A5E]/12 text-[#5C7A5E]",    featured: true,
-    title: "İstanbul'da 200 Sokak Köpeği Güvenli Barınağa Taşındı",
-    excerpt: "Beşiktaş Belediyesi ile yürütülen ortak operasyonda 200'den fazla sokak köpeği rehabilitasyon merkezine kavuştu. Operasyon, gönüllü veteriner ekiplerinin 3 aylık ön hazırlığı sonucunda hayata geçirildi.",
-    date: "24 Mayıs 2026", readTime: "3 dk", author: "Elif Kaya",
-    image: "https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=800&q=80" },
-
-  { slug: "yesil-kaplumbaga-koruma", category: "Deniz Canlıları", catCss: "bg-blue-100 text-blue-700", featured: false,
-    title: "Yeşil Kaplumbağa Koruma Projesi Akdeniz'e Yayılıyor",
-    excerpt: "WWF Türkiye ortaklığıyla başlatılan proje kapsamında Antalya kıyılarındaki yuvalama alanları koruma altına alındı.",
-    date: "20 Mayıs 2026", readTime: "4 dk", author: "Mert Demir",
-    image: "https://images.unsplash.com/photo-1518020382113-a7e8fc38eac9?w=600&q=80" },
-
-  { slug: "hayvan-haklari-yasa-mecliste", category: "Mevzuat", catCss: "bg-[#B5634B]/10 text-[#B5634B]", featured: false,
-    title: "Hayvan Hakları Yasa Teklifi TBMM Gündemine Taşındı",
-    excerpt: "Birden fazla milletvekili tarafından ortak hazırlanan yasa teklifi canlı hayvan ticaretinde köklü değişiklik öngörüyor.",
-    date: "15 Mayıs 2026", readTime: "5 dk", author: "Selin Arslan",
-    image: "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=600&q=80" },
-
-  { slug: "barinak-kosulları-rapor", category: "Kampanya", catCss: "bg-amber-100 text-amber-700", featured: false,
-    title: "Türkiye'deki Belediye Barınaklarında Koşullar Raporu Yayımlandı",
-    excerpt: "81 ilde 320 barınağı kapsayan araştırma, kapasite sorunları ve personel eksikliğini gün yüzüne çıkardı.",
-    date: "10 Mayıs 2026", readTime: "6 dk", author: "Ahmet Yılmaz",
-    image: "https://images.unsplash.com/photo-1548199973-03cce0bbc87b?w=600&q=80" },
-
-  { slug: "kars-kurtlar-koruma", category: "Yaban Hayatı", catCss: "bg-yellow-100 text-yellow-700", featured: false,
-    title: "Kars Ovasında Kurt Popülasyonu Koruma Altına Alındı",
-    excerpt: "Doğu Anadolu'da çoban köpeklerine yönelik zehirleme vakalarına karşı Çevre Bakanlığı harekete geçti.",
-    date: "5 Mayıs 2026", readTime: "4 dk", author: "Zeynep Çelik",
-    image: "https://images.unsplash.com/photo-1474511320723-9a56873867b5?w=600&q=80" },
-
-  { slug: "izmir-kedi-kolonisi", category: "Kampanya", catCss: "bg-amber-100 text-amber-700", featured: false,
-    title: "İzmir'de 1.500 Kedi Kolonisi Kayıt Altına Alındı",
-    excerpt: "Büyükşehir Belediyesi'nin hayata geçirdiği dijital kedi kolonisi haritası, mamacı gönüllüler için büyük kolaylık sağlıyor.",
-    date: "28 Nisan 2026", readTime: "3 dk", author: "Burak Öztürk",
-    image: "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=600&q=80" },
-
-  { slug: "delfin-ticareti", category: "Deniz Canlıları", catCss: "bg-blue-100 text-blue-700", featured: false,
-    title: "Karadeniz'de Yasadışı Yunus Ticareti Soruşturması",
-    excerpt: "Sosyal medyada paylaşılan görüntüler üzerine başlatılan soruşturma, örgütlü bir yunus kaçakçılığı ağını deşifre etti.",
-    date: "22 Nisan 2026", readTime: "5 dk", author: "Mert Demir",
-    image: "https://images.unsplash.com/photo-1607153333879-c174d265f1d2?w=600&q=80" },
-
-  { slug: "ciftlik-hayvanlari-denetim", category: "Mevzuat", catCss: "bg-[#B5634B]/10 text-[#B5634B]", featured: false,
-    title: "Çiftlik Hayvanları Denetim Yönetmeliği Güncelleniyor",
-    excerpt: "Tarım ve Orman Bakanlığı, AB standartlarına uyum kapsamında çiftlik denetimlerini sıklaştıracağını açıkladı.",
-    date: "17 Nisan 2026", readTime: "4 dk", author: "Selin Arslan",
-    image: "https://images.unsplash.com/photo-1500595046743-cd271d694d30?w=600&q=80" },
-
-  { slug: "gocmen-kus-avciligi", category: "Yaban Hayatı", catCss: "bg-yellow-100 text-yellow-700", featured: false,
-    title: "Göç Döneminde Kuş Avcılığı: 47 Gözaltı",
-    excerpt: "Bahar göçü döneminde yasadışı avcılık yapan 47 kişi Jandarma operasyonlarında gözaltına alındı.",
-    date: "10 Nisan 2026", readTime: "3 dk", author: "Ahmet Yılmaz",
-    image: "https://images.unsplash.com/photo-1444464666168-49d633b86797?w=600&q=80" },*/
-];
-
-const featuredNews = allNews.find(n => n.featured);
-const regularNews  = allNews.filter(n => !n.featured);
+const categories = ["Tümü", "Kurtarma", "Mevzuat", "Deniz Canlıları", "Yaban Hayatı", "Kampanya", "Diğer"];
 ---
 
 <BaseLayout title="Haberler | Hayvan Hakları Platformu">
 
-  <!-- Header -->
+  <!-- Hero -->
   <section class="bg-[#1C1814] text-white pt-16 pb-20 relative overflow-hidden">
     <div class="absolute inset-0 opacity-10">
       <div class="absolute top-0 right-0 w-96 h-96 bg-[#B5634B] rounded-full blur-3xl"></div>
     </div>
     <div class="relative z-10 mx-auto max-w-7xl px-5 sm:px-8">
       <span class="section-label text-[#FDF9F3]">Haber Merkezi</span>
-      <h1 class="section-title text-white mt-3"><span class="text-white">Son <span class="text-[#D4856E]">Gelişmeler</span></span></h1>
+      <h1 class="section-title text-white mt-3">
+        Son <span class="text-[#D4856E]">Gelişmeler</span>
+      </h1>
       <p class="mt-4 text-white/60 max-w-lg">
         Türkiye ve dünyadan hayvan hakları gündemi. Kurtarma operasyonlarından mevzuat haberlerine kadar.
       </p>
     </div>
   </section>
 
-  <!-- Category Filters -->
+  <!-- Kategori Filtreleri -->
   <div class="sticky top-16 z-40 bg-[#FDF9F3] border-b border-[#E8DDD2] shadow-sm">
     <div class="mx-auto max-w-7xl px-5 sm:px-8 overflow-x-auto">
       <div class="flex gap-2 py-3 min-w-max">
@@ -87,8 +31,7 @@ const regularNews  = allNews.filter(n => !n.featured);
           <button
             class={`category-filter px-4 py-2 rounded-full text-sm font-semibold transition-all
               ${i === 0 ? 'bg-[#1C1814] text-white' : 'bg-[#F5EFE6] text-[#6B5E55] hover:bg-[#E8DDD2]'}`}
-            data-category={cat}
-          >
+            data-category={cat}>
             {cat}
           </button>
         ))}
@@ -96,80 +39,192 @@ const regularNews  = allNews.filter(n => !n.featured);
     </div>
   </div>
 
+  <!-- İçerik -->
   <div class="mx-auto max-w-7xl px-5 sm:px-8 py-12">
 
-    <!-- Featured -->
-    {featuredNews && (
-      <article class="mb-12 group">
-        <a href={`/haberler/${featuredNews.slug}`}
-           class="grid lg:grid-cols-2 gap-0 rounded-3xl overflow-hidden border border-[#E8DDD2] bg-white hover:shadow-2xl transition-shadow duration-300">
-          <div class="overflow-hidden h-72 lg:h-auto">
-            <img src={featuredNews.image} alt={featuredNews.title}
-                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-          </div>
-          <div class="p-8 sm:p-12 flex flex-col justify-center">
-            <div class="flex items-center gap-3 mb-4">
-              <span class="bg-[#B5634B] text-white text-xs font-bold px-3 py-1 rounded-full">Öne Çıkan</span>
-              <span class={`text-xs font-bold px-3 py-1 rounded-full ${featuredNews.catCss}`}>{featuredNews.category}</span>
-            </div>
-            <h2 class="text-2xl sm:text-3xl font-black text-[#1C1814] leading-snug group-hover:text-[#B5634B] transition-colors">
-              {featuredNews.title}
-            </h2>
-            <p class="mt-4 text-[#6B5E55] leading-relaxed">{featuredNews.excerpt}</p>
-            <div class="mt-6 flex items-center justify-between text-sm text-amber-100">
-              <span>✍️ {featuredNews.author} · {featuredNews.date}</span>
-              <span class="font-semibold text-[#B5634B]">{featuredNews.readTime} okuma</span>
-            </div>
-          </div>
-        </a>
-      </article>
-    )}
+    <!-- Yükleniyor -->
+    <div id="yukleniyor" class="text-center py-20 text-[#A89A8E]">
+      <div class="text-4xl mb-3 animate-pulse">📰</div>
+      <p class="text-sm">Haberler yükleniyor...</p>
+    </div>
 
-    <!-- Grid -->
-    <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3" id="news-grid">
-      {regularNews.map(item => (
-        <article class="card group" data-category={item.category}>
-          <div class="overflow-hidden h-48">
-            <img src={item.image} alt={item.title}
-                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-          </div>
-          <div class="p-6">
-            <div class="flex items-center justify-between mb-3">
-              <span class={`text-xs font-bold px-3 py-1 rounded-full ${item.catCss}`}>{item.category}</span>
-              <span class="text-xs text-[text-amber-100]">{item.readTime}</span>
-            </div>
-            <h3 class="font-bold text-base leading-snug text-[#1C1814] group-hover:text-[#B5634B] transition-colors">
-              {item.title}
-            </h3>
-            <p class="mt-2 text-sm text-[#8A7B6F] leading-relaxed line-clamp-2">{item.excerpt}</p>
-            <div class="mt-4 pt-4 border-t border-[#F5EFE6] flex items-center justify-between text-xs text-[text-amber-100]">
-              <span>{item.author} · {item.date}</span>
-              <a href={`/haberler/${item.slug}`} class="font-semibold text-[#B5634B] hover:underline">Oku →</a>
-            </div>
-          </div>
-        </article>
-      ))}
+    <!-- Boş -->
+    <div id="bos-ekran" style="display:none;" class="text-center py-20 text-[#A89A8E]">
+      <div class="text-4xl mb-3">🐾</div>
+      <p class="text-sm">Henüz onaylanmış haber bulunmuyor.</p>
+    </div>
+
+    <!-- Haber Grid -->
+    <div id="haber-grid" style="display:none;" class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
     </div>
 
   </div>
+
+  <!-- Detay Modal Overlay -->
+  <div id="modal-overlay"
+    style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:80;backdrop-filter:blur(4px);"
+    onclick="modalKapat()">
+  </div>
+
+  <!-- Detay Modal -->
+  <div id="modal"
+    style="display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(0.96);z-index:90;width:calc(100% - 2rem);max-width:680px;max-height:85vh;background:#fff;border-radius:24px;box-shadow:0 24px 80px rgba(0,0,0,0.25);overflow:hidden;flex-direction:column;transition:transform 0.2s ease,opacity 0.2s ease;opacity:0;">
+
+    <!-- Modal Başlık -->
+    <div style="padding:1.25rem 1.5rem;border-bottom:1px solid #E8DDD2;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;">
+      <div style="display:flex;align-items:center;gap:0.625rem;">
+        <span id="modal-kategori" style="font-size:0.7rem;font-weight:700;padding:3px 10px;border-radius:9999px;background:#F5EFE6;color:#6B5E55;"></span>
+        <span id="modal-tarih" style="font-size:0.7rem;color:#A89A8E;"></span>
+        <span id="modal-gonderen" style="font-size:0.7rem;color:#8A7B6F;"></span>
+      </div>
+      <button onclick="modalKapat()"
+        style="width:32px;height:32px;border:none;background:#F5EFE6;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#6B5E55;flex-shrink:0;"
+        onmouseover="this.style.background='#E8DDD2'" onmouseout="this.style.background='#F5EFE6'">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18 6L6 18M6 6l12 12"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Modal İçerik -->
+    <div style="flex:1;overflow-y:auto;padding:2rem 1.75rem;">
+      <h2 id="modal-baslik" style="font-size:1.5rem;font-weight:900;color:#1C1814;line-height:1.35;margin-bottom:1.25rem;"></h2>
+      <p id="modal-icerik" style="color:#4A3F38;line-height:1.85;white-space:pre-wrap;font-size:0.9375rem;"></p>
+    </div>
+  </div>
+
 </BaseLayout>
 
-<script>
-  const buttons  = document.querySelectorAll<HTMLButtonElement>('.category-filter');
-  const articles = document.querySelectorAll<HTMLElement>('#news-grid article');
+<script define:vars={{ API_URL }}>
+  var API = API_URL;
+  var tumHaberler = [];
+  var aktifKategori = 'Tümü';
 
-  buttons.forEach(btn => {
-    btn.addEventListener('click', () => {
-      const cat = btn.dataset.category;
-      buttons.forEach(b => {
+  var katRenkler = {
+    'Kurtarma':       'bg-[#5C7A5E]/12 text-[#5C7A5E]',
+    'Mevzuat':        'bg-[#B5634B]/10 text-[#B5634B]',
+    'Deniz Canlıları':'bg-blue-100 text-blue-700',
+    'Yaban Hayatı':   'bg-yellow-100 text-yellow-700',
+    'Kampanya':       'bg-amber-100 text-amber-700',
+    'Diğer':          'bg-gray-100 text-gray-600',
+  };
+
+  function katBadgeStyle(kat) {
+    var stilMap = {
+      'Kurtarma':        'background:rgba(92,122,94,0.12);color:#5C7A5E;',
+      'Mevzuat':         'background:rgba(181,99,75,0.1);color:#B5634B;',
+      'Deniz Canlıları': 'background:#dbeafe;color:#1d4ed8;',
+      'Yaban Hayatı':    'background:#fef9c3;color:#a16207;',
+      'Kampanya':        'background:#fef3c7;color:#92400e;',
+    };
+    return stilMap[kat] || 'background:#f3f4f6;color:#6b7280;';
+  }
+
+  function ozet(metin, limit) {
+    if (!metin) return '';
+    return metin.length > limit ? metin.slice(0, limit).trimEnd() + '…' : metin;
+  }
+
+  // ── Haberler yükle ───────────────────────────────
+  async function haberleriYukle() {
+    try {
+      var res = await fetch(API + '/api/haberler');
+      var data = await res.json();
+      tumHaberler = data.data || [];
+    } catch (e) {
+      tumHaberler = [];
+    }
+    document.getElementById('yukleniyor').style.display = 'none';
+    gridRender(aktifKategori);
+  }
+
+  // ── Grid render ──────────────────────────────────
+  function gridRender(kategori) {
+    var grid = document.getElementById('haber-grid');
+    var bos  = document.getElementById('bos-ekran');
+    grid.innerHTML = '';
+
+    var filtreli = kategori === 'Tümü'
+      ? tumHaberler
+      : tumHaberler.filter(function(h) { return h.kategori === kategori; });
+
+    if (filtreli.length === 0) {
+      grid.style.display = 'none';
+      bos.style.display = 'block';
+      return;
+    }
+    bos.style.display = 'none';
+    grid.style.display = 'grid';
+
+    filtreli.forEach(function(h) {
+      var kart = document.createElement('article');
+      kart.className = 'card group cursor-pointer';
+      kart.dataset.kategori = h.kategori;
+      kart.innerHTML =
+        '<div style="padding:1.25rem 1.25rem 0;">' +
+          '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.875rem;">' +
+            '<span style="font-size:0.7rem;font-weight:700;padding:3px 10px;border-radius:9999px;' + katBadgeStyle(h.kategori) + '">' + (h.kategori || 'Genel') + '</span>' +
+            '<span style="font-size:0.7rem;color:#A89A8E;">' + h.tarih + '</span>' +
+          '</div>' +
+          '<h3 style="font-weight:800;font-size:0.9375rem;line-height:1.4;color:#1C1814;margin-bottom:0.625rem;transition:color 0.15s;" class="group-hover:text-[#B5634B]">' + h.baslik + '</h3>' +
+          '<p style="font-size:0.8125rem;color:#8A7B6F;line-height:1.6;margin-bottom:1rem;">' + ozet(h.icerik, 140) + '</p>' +
+        '</div>' +
+        '<div style="padding:0.875rem 1.25rem;border-top:1px solid #F5EFE6;display:flex;align-items:center;justify-content:space-between;">' +
+          '<span style="font-size:0.75rem;color:#8A7B6F;">✍️ ' + h.gonderen + '</span>' +
+          '<span style="font-size:0.75rem;font-weight:700;color:#B5634B;">Devamını oku →</span>' +
+        '</div>';
+      kart.addEventListener('click', function() { modalAc(h); });
+      grid.appendChild(kart);
+    });
+  }
+
+  // ── Modal ────────────────────────────────────────
+  function modalAc(h) {
+    document.getElementById('modal-kategori').textContent = h.kategori || 'Genel';
+    document.getElementById('modal-tarih').textContent = h.tarih;
+    document.getElementById('modal-gonderen').textContent = '✍️ ' + h.gonderen;
+    document.getElementById('modal-baslik').textContent = h.baslik;
+    document.getElementById('modal-icerik').textContent = h.icerik;
+
+    var overlay = document.getElementById('modal-overlay');
+    var modal   = document.getElementById('modal');
+    overlay.style.display = 'block';
+    modal.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+    requestAnimationFrame(function() {
+      modal.style.opacity = '1';
+      modal.style.transform = 'translate(-50%,-50%) scale(1)';
+    });
+  }
+
+  function modalKapat() {
+    var modal   = document.getElementById('modal');
+    var overlay = document.getElementById('modal-overlay');
+    modal.style.opacity = '0';
+    modal.style.transform = 'translate(-50%,-50%) scale(0.96)';
+    setTimeout(function() {
+      modal.style.display = 'none';
+      overlay.style.display = 'none';
+      document.body.style.overflow = '';
+    }, 200);
+  }
+  window.modalKapat = modalKapat;
+
+  document.addEventListener('keydown', function(e) { if (e.key === 'Escape') modalKapat(); });
+
+  // ── Kategori filtresi ────────────────────────────
+  document.querySelectorAll('.category-filter').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      aktifKategori = btn.dataset.category;
+      document.querySelectorAll('.category-filter').forEach(function(b) {
         b.classList.remove('bg-[#1C1814]', 'text-white');
         b.classList.add('bg-[#F5EFE6]', 'text-[#6B5E55]');
       });
       btn.classList.add('bg-[#1C1814]', 'text-white');
       btn.classList.remove('bg-[#F5EFE6]', 'text-[#6B5E55]');
-      articles.forEach(a => {
-        a.style.display = (cat === 'Tümü' || a.dataset.category === cat) ? '' : 'none';
-      });
+      gridRender(aktifKategori);
     });
   });
+
+  haberleriYukle();
 </script>

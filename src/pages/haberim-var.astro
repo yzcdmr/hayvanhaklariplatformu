@@ -1,0 +1,273 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+const API_URL = import.meta.env.PUBLIC_API_URL || 'http://localhost:8080';
+---
+
+<BaseLayout title="Haberim Var | Hayvan Hakları Platformu">
+
+  <section class="bg-[#1C1814] text-white pt-16 pb-20 relative overflow-hidden">
+    <div class="absolute inset-0 opacity-10">
+      <div class="absolute top-0 right-0 w-96 h-96 bg-[#B5634B] rounded-full blur-3xl"></div>
+    </div>
+    <div class="relative z-10 mx-auto max-w-7xl px-5 sm:px-8">
+      <span class="section-label text-[#FDF9F3]">Gönüllü Portalı</span>
+      <h1 class="section-title text-white mt-3">
+        <span class="text-white">Haberim <span class="text-[#D4856E]">Var</span></span>
+      </h1>
+      <p class="mt-4 text-white/60 max-w-lg">
+        Hayvan hakları ihlallerini, kurtarma operasyonlarını ve yerel haberleri platforma gönderin.
+      </p>
+    </div>
+  </section>
+
+  <!-- Giriş yapılmamış uyarısı -->
+  <div id="giris-gerekli" style="display:none;" class="mx-auto max-w-xl px-5 py-24 text-center">
+    <div class="text-5xl mb-6">🐾</div>
+    <h2 class="text-xl font-black text-[#1C1814] mb-3">Giriş Yapmanız Gerekiyor</h2>
+    <p class="text-[#6B5E55] mb-8">Haber göndermek ve haberlerinizi yönetmek için gönüllü hesabınızla giriş yapın.</p>
+    <button id="giris-ac-btn" class="btn-accent px-8 py-3 text-base">Giriş Yap / Kayıt Ol</button>
+  </div>
+
+  <!-- Ana içerik (giriş yapılmışsa) -->
+  <div id="icerik" style="display:none;" class="mx-auto max-w-7xl px-5 sm:px-8 py-10">
+    <div class="flex gap-6" style="min-height:600px;">
+
+      <!-- Sol: Liste -->
+      <div class="w-72 flex-shrink-0 flex flex-col">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="font-black text-[#1C1814] text-base">Haberlerim</h2>
+          <button id="yeni-haber-btn"
+            class="btn-accent text-xs py-1.5 px-4">
+            + Yeni Haber
+          </button>
+        </div>
+
+        <div id="haber-liste" class="flex flex-col gap-2 flex-1 overflow-y-auto">
+          <p id="haber-liste-bos" class="text-sm text-[#A89A8E] py-8 text-center">Henüz haber yok.</p>
+        </div>
+      </div>
+
+      <!-- Sağ: Detay veya Form -->
+      <div class="flex-1 bg-white rounded-2xl border border-[#E8DDD2] overflow-hidden flex flex-col">
+
+        <!-- Yeni haber formu -->
+        <div id="haber-form" class="flex-1 p-8 overflow-y-auto">
+          <h3 class="font-black text-[#1C1814] text-lg mb-1">Yeni Haber Gönder</h3>
+          <p class="text-sm text-[#8A7B6F] mb-6">Haberinizi editörlerimiz inceleyecek ve uygun görülürse yayınlayacak.</p>
+
+          <div id="haber-hata" style="display:none;" class="bg-red-50 border border-red-200 rounded-xl px-4 py-3 text-sm text-red-600 mb-5"></div>
+          <div id="haber-basari" style="display:none;" class="bg-green-50 border border-green-200 rounded-xl px-4 py-3 text-sm text-green-700 mb-5"></div>
+
+          <div class="grid sm:grid-cols-2 gap-4 mb-4">
+            <div class="sm:col-span-2">
+              <label class="block text-xs font-700 text-[#6B5E55] mb-1.5 uppercase tracking-wide font-bold">Başlık</label>
+              <input type="text" id="haber-baslik-inp" placeholder="Haber başlığını yazın"
+                class="w-full border border-[#E8DDD2] rounded-xl px-4 py-3 text-sm text-[#1C1814] bg-[#FDF9F3] outline-none focus:border-[#B5634B] transition-colors" />
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-[#6B5E55] mb-1.5 uppercase tracking-wide">Kategori</label>
+              <select id="haber-kategori-inp"
+                class="w-full border border-[#E8DDD2] rounded-xl px-4 py-3 text-sm text-[#1C1814] bg-[#FDF9F3] outline-none focus:border-[#B5634B] transition-colors cursor-pointer">
+                <option value="">Seçiniz</option>
+                <option>Kurtarma</option>
+                <option>Mevzuat</option>
+                <option>Deniz Canlıları</option>
+                <option>Yaban Hayatı</option>
+                <option>Kampanya</option>
+                <option>Diğer</option>
+              </select>
+            </div>
+            <div class="flex items-end">
+              <p class="text-xs text-[#A89A8E] leading-relaxed">Kategorisiz haberler de kabul edilir.</p>
+            </div>
+          </div>
+
+          <div class="mb-6">
+            <label class="block text-xs font-bold text-[#6B5E55] mb-1.5 uppercase tracking-wide">İçerik</label>
+            <textarea id="haber-icerik-inp" placeholder="Haberin detaylarını buraya yazın..." rows="10"
+              class="w-full border border-[#E8DDD2] rounded-xl px-4 py-3 text-sm text-[#1C1814] bg-[#FDF9F3] outline-none focus:border-[#B5634B] transition-colors resize-y font-[inherit]"></textarea>
+          </div>
+
+          <button id="haber-gonder-btn" class="btn-accent px-8 py-3 text-base">
+            Haberi Gönder
+          </button>
+        </div>
+
+        <!-- Detay görünümü -->
+        <div id="haber-detay" style="display:none;" class="flex-1 p-8 overflow-y-auto">
+          <div class="flex items-center gap-3 mb-5">
+            <span id="detay-durum" class="text-xs font-bold px-3 py-1 rounded-full"></span>
+            <span id="detay-kategori" class="text-sm text-[#8A7B6F]"></span>
+            <span id="detay-tarih" class="text-xs text-[#A89A8E] ml-auto"></span>
+          </div>
+          <h2 id="detay-baslik" class="text-2xl font-black text-[#1C1814] leading-snug mb-6"></h2>
+          <p id="detay-icerik" class="text-[#4A3F38] leading-relaxed whitespace-pre-wrap text-base"></p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</BaseLayout>
+
+<script define:vars={{ API_URL }}>
+  var API = API_URL;
+  var aktifHaberler = [];
+
+  function mevcutKullanici() {
+    try { return JSON.parse(localStorage.getItem('hhp_user') || 'null'); }
+    catch { return null; }
+  }
+
+  function baslat() {
+    var kullanici = mevcutKullanici();
+    if (!kullanici) {
+      document.getElementById('giris-gerekli').style.display = 'block';
+      document.getElementById('icerik').style.display = 'none';
+      document.getElementById('giris-ac-btn').addEventListener('click', function() {
+        document.getElementById('auth-open-btn')?.click();
+      });
+      return;
+    }
+    document.getElementById('giris-gerekli').style.display = 'none';
+    document.getElementById('icerik').style.display = 'block';
+    haberleriYukle();
+  }
+
+  async function haberleriYukle() {
+    var token = localStorage.getItem('hhp_token');
+    if (!token) return;
+    try {
+      var res = await fetch(API + '/api/haberler/benim', {
+        headers: { 'Authorization': 'Bearer ' + token }
+      });
+      var data = await res.json();
+      aktifHaberler = data.data || [];
+      haberListesiRender();
+    } catch (e) {}
+  }
+
+  var durumMap = {
+    BEKLEMEDE:  { etiket: 'İncelemede', renk: '#92400e', bg: '#fef3c7' },
+    ONAYLANDI:  { etiket: 'Onaylandı',  renk: '#166534', bg: '#dcfce7' },
+    REDDEDILDI: { etiket: 'Reddedildi', renk: '#991b1b', bg: '#fee2e2' }
+  };
+
+  function haberListesiRender() {
+    var liste = document.getElementById('haber-liste');
+    var bos   = document.getElementById('haber-liste-bos');
+    liste.querySelectorAll('.haber-kart').forEach(function(k) { k.remove(); });
+
+    if (aktifHaberler.length === 0) { bos.style.display = 'block'; return; }
+    bos.style.display = 'none';
+
+    aktifHaberler.forEach(function(h) {
+      var d = durumMap[h.durum] || durumMap.BEKLEMEDE;
+      var el = document.createElement('div');
+      el.className = 'haber-kart';
+      el.style.cssText = 'padding:0.875rem 1rem;border-radius:14px;cursor:pointer;border:1.5px solid #E8DDD2;background:#fff;transition:border-color 0.15s,background 0.15s;';
+      el.innerHTML =
+        '<p style="font-size:0.8125rem;font-weight:700;color:#1C1814;line-height:1.35;margin-bottom:6px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">' + h.baslik + '</p>' +
+        '<div style="display:flex;align-items:center;gap:6px;">' +
+          '<span style="font-size:0.65rem;font-weight:700;padding:2px 8px;border-radius:9999px;color:' + d.renk + ';background:' + d.bg + ';">' + d.etiket + '</span>' +
+          '<span style="font-size:0.65rem;color:#A89A8E;">' + h.tarih + '</span>' +
+        '</div>';
+      el.addEventListener('mouseenter', function() { if (el.dataset.secili !== 'true') el.style.borderColor = '#D4856E'; });
+      el.addEventListener('mouseleave', function() { if (el.dataset.secili !== 'true') el.style.borderColor = '#E8DDD2'; });
+      el.addEventListener('click', function() {
+        liste.querySelectorAll('.haber-kart').forEach(function(k) {
+          k.dataset.secili = 'false';
+          k.style.borderColor = '#E8DDD2';
+          k.style.background = '#fff';
+        });
+        el.dataset.secili = 'true';
+        el.style.borderColor = '#B5634B';
+        el.style.background = '#FDF9F3';
+        haberDetayGoster(h);
+      });
+      liste.appendChild(el);
+    });
+  }
+
+  function haberDetayGoster(h) {
+    document.getElementById('haber-form').style.display = 'none';
+    document.getElementById('haber-detay').style.display = 'flex';
+    var d = durumMap[h.durum] || durumMap.BEKLEMEDE;
+    var durumEl = document.getElementById('detay-durum');
+    durumEl.textContent = d.etiket;
+    durumEl.style.color = d.renk;
+    durumEl.style.background = d.bg;
+    document.getElementById('detay-kategori').textContent = h.kategori || '';
+    document.getElementById('detay-tarih').textContent = h.tarih;
+    document.getElementById('detay-baslik').textContent = h.baslik;
+    document.getElementById('detay-icerik').textContent = h.icerik;
+  }
+
+  function haberFormGoster() {
+    document.getElementById('haber-detay').style.display = 'none';
+    document.getElementById('haber-form').style.display = 'flex';
+    document.getElementById('haber-hata').style.display = 'none';
+    document.getElementById('haber-basari').style.display = 'none';
+    document.getElementById('haber-baslik-inp').value = '';
+    document.getElementById('haber-kategori-inp').value = '';
+    document.getElementById('haber-icerik-inp').value = '';
+    document.getElementById('haber-liste').querySelectorAll('.haber-kart').forEach(function(k) {
+      k.dataset.secili = 'false';
+      k.style.borderColor = '#E8DDD2';
+      k.style.background = '#fff';
+    });
+  }
+
+  document.getElementById('yeni-haber-btn').addEventListener('click', haberFormGoster);
+
+  document.getElementById('haber-gonder-btn').addEventListener('click', async function() {
+    var baslik   = document.getElementById('haber-baslik-inp').value.trim();
+    var icerik   = document.getElementById('haber-icerik-inp').value.trim();
+    var kategori = document.getElementById('haber-kategori-inp').value;
+    var hataEl   = document.getElementById('haber-hata');
+    var basariEl = document.getElementById('haber-basari');
+
+    hataEl.style.display = 'none';
+    basariEl.style.display = 'none';
+
+    if (!baslik || !icerik) {
+      hataEl.textContent = 'Başlık ve içerik zorunludur.';
+      hataEl.style.display = 'block';
+      return;
+    }
+
+    var btn = document.getElementById('haber-gonder-btn');
+    btn.textContent = 'Gönderiliyor...';
+    btn.disabled = true;
+
+    try {
+      var token = localStorage.getItem('hhp_token');
+      var res = await fetch(API + '/api/haberler', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+        body: JSON.stringify({ baslik: baslik, icerik: icerik, kategori: kategori })
+      });
+      var data = await res.json();
+      if (res.ok && data.basari) {
+        basariEl.textContent = 'Haberiniz iletildi! Editörlerimiz inceleyecek.';
+        basariEl.style.display = 'block';
+        aktifHaberler.unshift(data.data);
+        haberListesiRender();
+        document.getElementById('haber-baslik-inp').value = '';
+        document.getElementById('haber-icerik-inp').value = '';
+        document.getElementById('haber-kategori-inp').value = '';
+      } else {
+        hataEl.textContent = data.mesaj || 'Gönderim başarısız.';
+        hataEl.style.display = 'block';
+      }
+    } catch (e) {
+      hataEl.textContent = 'Sunucuya bağlanılamadı.';
+      hataEl.style.display = 'block';
+    }
+
+    btn.textContent = 'Haberi Gönder';
+    btn.disabled = false;
+  });
+
+  baslat();
+</script>

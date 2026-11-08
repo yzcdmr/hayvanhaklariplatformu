@@ -1,56 +1,83 @@
 ---
 const currentPath = Astro.url.pathname;
+const API_URL = import.meta.env.PUBLIC_API_URL || 'http://localhost:8080';
 const links = [
-  { href: "/",           label: "Ana Sayfa" },
-  { href: "/manifesto",  label: "Manifesto" },
-  { href: "/haberler",   label: "Haberler" },
-  { href: "/hakkimizda", label: "Hakkımızda" },
-  { href: "/iletisim",   label: "İletişim" },
+  { href: "/",              label: "Ana Sayfa" },
+  { href: "/manifesto",     label: "Manifesto" },
+  { href: "/haberler",      label: "Haberler" },
+  { href: "/hakkimizda",    label: "Hakkımızda" },
+  { href: "/iletisim",      label: "İletişim" },
+  { href: "/haberim-var",   label: "Haberim Var", authOnly: true },
 ];
 ---
 
 <header class="sticky top-0 z-50 bg-[#B5634B]/92 backdrop-blur-md border-b border-[#E8DDD2] shadow-sm">
   <div class="mx-auto max-w-7xl px-5 sm:px-8">
-    <div class="flex h-16 items-center justify-between">
+    <div class="flex h-16 items-center justify-between gap-3">
 
       <!-- Logo -->
-      <a href="/" class="flex items-center gap-3 group">
-        <div class="w-9 h-9 rounded-xl bg-[#1C1814] flex items-center justify-center flex-shrink-0 group-hover:bg-[#8A7B6F] transition-colors duration-200">
+      <a href="/" class="flex items-center gap-3 group flex-shrink-0">
+        <div class="w-9 h-9 rounded-xl bg-[#1C1814] flex items-center justify-center flex-shrink-0 group-hover:bg-[#B5634B] transition-colors duration-200">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
           </svg>
         </div>
         <div class="leading-tight">
           <span class="font-black text-[#1C1814] text-sm sm:text-base tracking-tight">Hayvan Hakları</span>
-          <span class="hidden sm:block text-xs text-[#E8DDD2] font-medium -mt-0.5">Türkiye Platformu</span>
+          <span class="hidden sm:block text-xs text-[#8A7B6F] font-medium -mt-0.5">Türkiye Platformu</span>
         </div>
       </a>
 
       <!-- Desktop Nav -->
-      <nav class="hidden md:flex items-center gap-1">
+      <nav class="hidden lg:flex items-center gap-1">
         {links.map(link => (
-          <a
-            href={link.href}
-            class={`nav-link px-4 py-2 rounded-lg text-sm transition-all
+          <a href={link.href}
+            data-auth-only={link.authOnly ? "true" : undefined}
+            class={`nav-link px-3 xl:px-4 py-2 rounded-lg text-sm whitespace-nowrap transition-all
+              ${link.authOnly ? 'hidden' : ''}
               ${currentPath === link.href
-                ? 'active text-[#1C1814] font-bold bg-[#6B5E55]'
-                : 'text-[#E8DDD2] hover:bg-[#6B5E55] hover:text-[#1C1814]'}`}
-          >
+                ? 'active text-[#1C1814] font-bold bg-[#F5EFE6]'
+                : 'text-[#6B5E55] hover:bg-[#F5EFE6] hover:text-[#1C1814]'}`}>
             {link.label}
           </a>
         ))}
       </nav>
 
-      <!-- CTA + Hamburger -->
-      <div class="flex items-center gap-3">
-        <a href="/iletisim" class="hidden sm:inline-flex btn-accent text-sm py-2 px-5">
-          Bize Ulaş
-        </a>
-        <button
-          id="menu-toggle"
-          class="md:hidden flex flex-col gap-1.5 w-9 h-9 items-center justify-center rounded-lg hover:bg-[#F5EFE6] transition-colors"
-          aria-label="Menüyü aç"
-        >
+      <!-- Sağ Butonlar -->
+      <div class="flex items-center gap-2 flex-shrink-0">
+        <!-- Görünürlük sarmalayıcıda: .btn-accent'in display değeri Tailwind sınıflarını eziyor -->
+        <span class="hidden sm:contents lg:hidden xl:contents">
+          <a href="/iletisim" class="btn-accent text-sm py-2 px-5">Bize Ulaş</a>
+        </span>
+
+        <!-- Giriş YOK: Gönüllü Giriş butonu -->
+        <button id="auth-open-btn"
+          class="hidden sm:inline-flex items-center gap-2 border-2 border-[#1C1814] text-[#1C1814] text-sm font-semibold px-4 py-2 rounded-full hover:bg-[#1C1814] hover:text-white transition-all duration-200">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+          </svg>
+          Gönüllü Giriş
+        </button>
+
+        <!-- Giriş VAR: Kullanıcı adı + çıkış -->
+        <div id="user-menu" style="display:none;" class="hidden sm:flex items-center gap-2">
+          <div style="display:flex;align-items:center;gap:8px;background:#F5EFE6;border-radius:9999px;padding:6px 14px 6px 8px;">
+            <div id="user-avatar" style="width:26px;height:26px;background:#B5634B;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff;"></div>
+            <span id="user-name" style="font-size:0.8125rem;font-weight:600;color:#1C1814;"></span>
+            <span id="user-rol-badge" style="font-size:0.6875rem;font-weight:700;padding:2px 8px;border-radius:9999px;"></span>
+          </div>
+          <button id="logout-btn" title="Çıkış Yap"
+            style="width:32px;height:32px;border:none;background:#F5EFE6;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#8A7B6F;"
+            onmouseover="this.style.background='#E8DDD2'" onmouseout="this.style.background='#F5EFE6'">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Hamburger -->
+        <button id="menu-toggle"
+          class="lg:hidden flex flex-col gap-1.5 w-9 h-9 items-center justify-center rounded-lg hover:bg-[#F5EFE6] transition-colors">
           <span class="w-5 h-0.5 bg-[#6B5E55] rounded-full block transition-all" id="bar1"></span>
           <span class="w-5 h-0.5 bg-[#6B5E55] rounded-full block transition-all" id="bar2"></span>
           <span class="w-4 h-0.5 bg-[#6B5E55] rounded-full block transition-all" id="bar3"></span>
@@ -60,42 +87,374 @@ const links = [
   </div>
 
   <!-- Mobile Menu -->
-  <div id="mobile-menu" class="md:hidden flex-col bg-[#FDF9F3] border-t border-[#E8DDD2] px-5 pb-5 pt-3 gap-1 shadow-lg">
+  <div id="mobile-menu" class="lg:hidden flex-col bg-[#FDF9F3] border-t border-[#E8DDD2] px-5 pb-5 pt-3 gap-1 shadow-lg">
     {links.map(link => (
-      <a
-        href={link.href}
+      <a href={link.href}
+        data-auth-only={link.authOnly ? "true" : undefined}
         class={`block px-4 py-3 rounded-xl text-sm font-medium transition-colors
-          ${currentPath === link.href
-            ? 'bg-[#1C1814] text-white'
-            : 'text-[#6B5E55] hover:bg-[#F5EFE6]'}`}
-      >
+          ${link.authOnly ? 'hidden' : ''}
+          ${currentPath === link.href ? 'bg-[#1C1814] text-white' : 'text-[#6B5E55] hover:bg-[#F5EFE6]'}`}>
         {link.label}
       </a>
     ))}
-    <a href="/iletisim" class="mt-2 block text-center btn-accent text-sm py-3">
-      Bize Ulaş
-    </a>
+    <div class="flex gap-2 mt-3 pt-3 border-t border-[#E8DDD2]">
+      <a href="/iletisim" class="flex-1 text-center btn-accent text-sm py-2.5">Bize Ulaş</a>
+      <button id="auth-open-btn-mobile"
+        class="flex-1 border-2 border-[#1C1814] text-[#1C1814] text-sm font-semibold py-2.5 rounded-full hover:bg-[#1C1814] hover:text-white transition-all">
+        Gönüllü Giriş
+      </button>
+    </div>
   </div>
 </header>
 
-<script>
-  const toggle = document.getElementById('menu-toggle');
-  const menu   = document.getElementById('mobile-menu');
-  const bar1   = document.getElementById('bar1');
-  const bar2   = document.getElementById('bar2');
-  const bar3   = document.getElementById('bar3');
-  toggle?.addEventListener('click', () => {
-    const isOpen = menu?.classList.toggle('open');
-    if (isOpen) {
-      bar1!.style.transform = 'translateY(8px) rotate(45deg)';
-      bar2!.style.opacity   = '0';
-      bar3!.style.transform = 'translateY(-8px) rotate(-45deg)';
-      bar3!.style.width     = '20px';
+<!-- Overlay -->
+<div id="auth-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:60;"></div>
+
+<!-- Auth Panel -->
+<div id="auth-panel" style="position:fixed;top:0;right:0;height:100%;width:100%;max-width:400px;background:#fff;z-index:70;box-shadow:-8px 0 40px rgba(0,0,0,0.15);display:flex;flex-direction:column;transform:translateX(100%);transition:transform 0.3s ease,max-width 0.3s ease;">
+
+  <!-- Başlık -->
+  <div style="display:flex;align-items:center;justify-content:space-between;padding:1.25rem 1.5rem;border-bottom:1px solid #E8DDD2;flex-shrink:0;">
+    <div style="display:flex;align-items:center;gap:0.75rem;">
+      <div style="width:32px;height:32px;background:#1C1814;border-radius:8px;display:flex;align-items:center;justify-content:center;">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+        </svg>
+      </div>
+      <span style="font-weight:900;font-size:1rem;color:#1C1814;">Gönüllü Portalı</span>
+    </div>
+    <button id="auth-close-btn" style="width:32px;height:32px;display:flex;align-items:center;justify-content:center;border:none;background:none;cursor:pointer;border-radius:8px;color:#8A7B6F;" onmouseover="this.style.background='#F5EFE6'" onmouseout="this.style.background='none'">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+    </button>
+  </div>
+
+  <!-- Sekmeler -->
+  <div style="display:flex;border-bottom:1px solid #E8DDD2;flex-shrink:0;">
+    <button id="tab-giris-btn" style="flex:1;padding:0.875rem;font-size:0.875rem;font-weight:700;border:none;background:none;cursor:pointer;color:#1C1814;border-bottom:2px solid #1C1814;">Giriş Yap</button>
+    <button id="tab-kayit-btn" style="flex:1;padding:0.875rem;font-size:0.875rem;font-weight:600;border:none;background:none;cursor:pointer;color:#8A7B6F;border-bottom:2px solid transparent;">Kayıt Ol</button>
+  </div>
+
+  <!-- Form Alanı -->
+  <div style="flex:1;overflow-y:auto;padding:1.5rem;">
+
+    <!-- GİRİŞ FORMU -->
+    <div id="form-giris">
+      <p style="font-size:0.875rem;color:#8A7B6F;margin-bottom:1.5rem;line-height:1.6;">Hesabınıza giriş yapın, haberlerinizi yönetin.</p>
+      <div id="giris-hata" style="display:none;background:#fef2f2;border:1px solid #fca5a5;border-radius:10px;padding:0.75rem 1rem;font-size:0.8125rem;color:#dc2626;margin-bottom:1rem;"></div>
+
+      <div style="margin-bottom:1rem;">
+        <label style="display:block;font-size:0.75rem;font-weight:600;color:#6B5E55;margin-bottom:0.375rem;">E-posta</label>
+        <input type="email" id="giris-email" placeholder="ornek@email.com" autocomplete="email"
+          style="width:100%;border:1.5px solid #E8DDD2;border-radius:10px;padding:0.75rem 1rem;font-size:0.875rem;color:#1C1814;background:#FDF9F3;outline:none;box-sizing:border-box;"
+          onfocus="this.style.borderColor='#B5634B'" onblur="this.style.borderColor='#E8DDD2'" />
+      </div>
+      <div style="margin-bottom:1.25rem;">
+        <label style="display:block;font-size:0.75rem;font-weight:600;color:#6B5E55;margin-bottom:0.375rem;">Şifre</label>
+        <div style="position:relative;">
+          <input type="password" id="giris-sifre" placeholder="••••••••" autocomplete="current-password"
+            style="width:100%;border:1.5px solid #E8DDD2;border-radius:10px;padding:0.75rem 1rem;padding-right:2.75rem;font-size:0.875rem;color:#1C1814;background:#FDF9F3;outline:none;box-sizing:border-box;"
+            onfocus="this.style.borderColor='#B5634B'" onblur="this.style.borderColor='#E8DDD2'" />
+          <button type="button" id="giris-goz-btn" style="position:absolute;right:0.75rem;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:#8A7B6F;padding:4px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <button id="giris-btn" style="width:100%;background:#1C1814;color:#fff;border:none;border-radius:9999px;padding:0.875rem;font-size:0.9375rem;font-weight:700;cursor:pointer;" onmouseover="this.style.background='#2e2520'" onmouseout="this.style.background='#1C1814'">
+        Giriş Yap
+      </button>
+      <p style="text-align:center;font-size:0.75rem;color:#8A7B6F;margin-top:1.25rem;">
+        Hesabınız yok mu? <button id="gec-kayit-btn" style="background:none;border:none;color:#B5634B;font-weight:700;cursor:pointer;text-decoration:underline;">Kayıt Olun →</button>
+      </p>
+    </div>
+
+    <!-- KAYIT FORMU -->
+    <div id="form-kayit" style="display:none;">
+      <p style="font-size:0.875rem;color:#8A7B6F;margin-bottom:1.5rem;line-height:1.6;">Ücretsiz kayıt olun, haberlerinizi platforma gönderin.</p>
+      <div id="kayit-hata" style="display:none;background:#fef2f2;border:1px solid #fca5a5;border-radius:10px;padding:0.75rem 1rem;font-size:0.8125rem;color:#dc2626;margin-bottom:1rem;"></div>
+
+      <div style="margin-bottom:1rem;">
+        <label style="display:block;font-size:0.75rem;font-weight:600;color:#6B5E55;margin-bottom:0.375rem;">Ad Soyad</label>
+        <input type="text" id="kayit-ad" placeholder="Ad Soyad" autocomplete="name"
+          style="width:100%;border:1.5px solid #E8DDD2;border-radius:10px;padding:0.75rem 1rem;font-size:0.875rem;color:#1C1814;background:#FDF9F3;outline:none;box-sizing:border-box;"
+          onfocus="this.style.borderColor='#B5634B'" onblur="this.style.borderColor='#E8DDD2'" />
+      </div>
+      <div style="margin-bottom:1rem;">
+        <label style="display:block;font-size:0.75rem;font-weight:600;color:#6B5E55;margin-bottom:0.375rem;">E-posta</label>
+        <input type="email" id="kayit-email" placeholder="ornek@email.com" autocomplete="email"
+          style="width:100%;border:1.5px solid #E8DDD2;border-radius:10px;padding:0.75rem 1rem;font-size:0.875rem;color:#1C1814;background:#FDF9F3;outline:none;box-sizing:border-box;"
+          onfocus="this.style.borderColor='#B5634B'" onblur="this.style.borderColor='#E8DDD2'" />
+      </div>
+      <div style="margin-bottom:1rem;">
+        <label style="display:block;font-size:0.75rem;font-weight:600;color:#6B5E55;margin-bottom:0.375rem;">Şifre <span style="font-weight:400;color:#A89A8E;">(en az 6 karakter)</span></label>
+        <div style="position:relative;">
+          <input type="password" id="kayit-sifre" placeholder="••••••••" autocomplete="new-password"
+            style="width:100%;border:1.5px solid #E8DDD2;border-radius:10px;padding:0.75rem 1rem;padding-right:2.75rem;font-size:0.875rem;color:#1C1814;background:#FDF9F3;outline:none;box-sizing:border-box;"
+            onfocus="this.style.borderColor='#B5634B'" onblur="this.style.borderColor='#E8DDD2'" />
+          <button type="button" id="kayit-goz-btn" style="position:absolute;right:0.75rem;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:#8A7B6F;padding:4px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+        </div>
+      </div>
+      <div style="margin-bottom:1.25rem;">
+        <label style="display:block;font-size:0.75rem;font-weight:600;color:#6B5E55;margin-bottom:0.375rem;">Şifre Tekrar</label>
+        <input type="password" id="kayit-sifre2" placeholder="••••••••" autocomplete="new-password"
+          style="width:100%;border:1.5px solid #E8DDD2;border-radius:10px;padding:0.75rem 1rem;font-size:0.875rem;color:#1C1814;background:#FDF9F3;outline:none;box-sizing:border-box;"
+          onfocus="this.style.borderColor='#B5634B'" onblur="this.style.borderColor='#E8DDD2'" />
+      </div>
+
+      <button id="kayit-btn" style="width:100%;background:#B5634B;color:#fff;border:none;border-radius:9999px;padding:0.875rem;font-size:0.9375rem;font-weight:700;cursor:pointer;" onmouseover="this.style.background='#9d5240'" onmouseout="this.style.background='#B5634B'">
+        Kayıt Ol
+      </button>
+      <p style="text-align:center;font-size:0.75rem;color:#8A7B6F;margin-top:1.25rem;">
+        Zaten hesabınız var mı? <button id="gec-giris-btn" style="background:none;border:none;color:#B5634B;font-weight:700;cursor:pointer;text-decoration:underline;">Giriş Yapın →</button>
+      </p>
+    </div>
+
+  </div>
+
+  <!-- Alt bilgi -->
+  <div style="padding:1rem 1.5rem;border-top:1px solid #E8DDD2;background:#FDF9F3;flex-shrink:0;">
+    <p style="text-align:center;font-size:0.75rem;color:#8A7B6F;">🐾 Gönderilen haberler editör onayından geçer.</p>
+  </div>
+</div>
+
+<script define:vars={{ API_URL }}>
+  var API = API_URL;
+
+  // ── localStorage yardımcıları ───────────────────
+  function tokenKaydet(data) {
+    localStorage.setItem('hhp_token', data.token);
+    localStorage.setItem('hhp_user', JSON.stringify({
+      id: data.id, ad: data.ad, email: data.email, rol: data.rol
+    }));
+  }
+  function tokenSil() {
+    localStorage.removeItem('hhp_token');
+    localStorage.removeItem('hhp_user');
+  }
+  function mevcutKullanici() {
+    try { return JSON.parse(localStorage.getItem('hhp_user') || 'null'); }
+    catch { return null; }
+  }
+
+  // ── Header kullanıcı gösterimi ──────────────────
+  function headerGuncelle() {
+    var kullanici = mevcutKullanici();
+    var authBtn   = document.getElementById('auth-open-btn');
+    var authBtnM  = document.getElementById('auth-open-btn-mobile');
+    var userMenu  = document.getElementById('user-menu');
+
+    if (kullanici) {
+      if (authBtn)  authBtn.style.display  = 'none';
+      if (authBtnM) authBtnM.style.display = 'none';
+      if (userMenu) {
+        userMenu.style.display = 'flex';
+        document.getElementById('user-avatar').textContent = kullanici.ad.charAt(0).toUpperCase();
+        document.getElementById('user-name').textContent   = kullanici.ad.split(' ')[0];
+        var badge = document.getElementById('user-rol-badge');
+        if (kullanici.rol === 'ADMIN') {
+          badge.textContent = 'Admin';
+          badge.style.background = '#B5634B20';
+          badge.style.color = '#B5634B';
+        } else {
+          badge.textContent = 'Gönüllü';
+          badge.style.background = '#5C7A5E20';
+          badge.style.color = '#5C7A5E';
+        }
+      }
     } else {
-      bar1!.style.transform = '';
-      bar2!.style.opacity   = '1';
-      bar3!.style.transform = '';
-      bar3!.style.width     = '';
+      if (authBtn)  authBtn.style.display  = '';
+      if (authBtnM) authBtnM.style.display = '';
+      if (userMenu) userMenu.style.display = 'none';
+    }
+  }
+
+  // ── Panel aç/kapat ──────────────────────────────
+  var panel   = document.getElementById('auth-panel');
+  var overlay = document.getElementById('auth-overlay');
+
+  function panelAc() {
+    panel.style.transform = 'translateX(0)';
+    overlay.style.display = 'block';
+    document.body.style.overflow = 'hidden';
+  }
+  function panelKapat() {
+    panel.style.transform = 'translateX(100%)';
+    overlay.style.display = 'none';
+    document.body.style.overflow = '';
+  }
+
+  document.getElementById('auth-open-btn')?.addEventListener('click', panelAc);
+  document.getElementById('auth-open-btn-mobile')?.addEventListener('click', panelAc);
+  document.getElementById('auth-close-btn').addEventListener('click', panelKapat);
+  overlay.addEventListener('click', panelKapat);
+  document.addEventListener('keydown', function(e) { if (e.key === 'Escape') panelKapat(); });
+
+  // ── Çıkış ───────────────────────────────────────
+  document.getElementById('logout-btn')?.addEventListener('click', function() {
+    tokenSil();
+    headerGuncelle();
+    window.location.reload();
+  });
+
+  // ── Sekme ───────────────────────────────────────
+  function sekmGiris() {
+    document.getElementById('form-giris').style.display = 'block';
+    document.getElementById('form-kayit').style.display = 'none';
+    document.getElementById('tab-giris-btn').style.color = '#1C1814';
+    document.getElementById('tab-giris-btn').style.fontWeight = '700';
+    document.getElementById('tab-giris-btn').style.borderBottom = '2px solid #1C1814';
+    document.getElementById('tab-kayit-btn').style.color = '#8A7B6F';
+    document.getElementById('tab-kayit-btn').style.fontWeight = '600';
+    document.getElementById('tab-kayit-btn').style.borderBottom = '2px solid transparent';
+  }
+  function sekmKayit() {
+    document.getElementById('form-giris').style.display = 'none';
+    document.getElementById('form-kayit').style.display = 'block';
+    document.getElementById('tab-kayit-btn').style.color = '#1C1814';
+    document.getElementById('tab-kayit-btn').style.fontWeight = '700';
+    document.getElementById('tab-kayit-btn').style.borderBottom = '2px solid #1C1814';
+    document.getElementById('tab-giris-btn').style.color = '#8A7B6F';
+    document.getElementById('tab-giris-btn').style.fontWeight = '600';
+    document.getElementById('tab-giris-btn').style.borderBottom = '2px solid transparent';
+  }
+
+  document.getElementById('tab-giris-btn').addEventListener('click', sekmGiris);
+  document.getElementById('tab-kayit-btn').addEventListener('click', sekmKayit);
+  document.getElementById('gec-kayit-btn').addEventListener('click', sekmKayit);
+  document.getElementById('gec-giris-btn').addEventListener('click', sekmGiris);
+
+  // ── Şifre göster ────────────────────────────────
+  function gozToggle(id) {
+    var inp = document.getElementById(id);
+    inp.type = inp.type === 'password' ? 'text' : 'password';
+  }
+  document.getElementById('giris-goz-btn').addEventListener('click', function() { gozToggle('giris-sifre'); });
+  document.getElementById('kayit-goz-btn').addEventListener('click', function() { gozToggle('kayit-sifre'); });
+
+  // ── Hata göster ─────────────────────────────────
+  function hataGoster(elId, mesaj) {
+    var el = document.getElementById(elId);
+    el.textContent = mesaj;
+    el.style.display = 'block';
+    setTimeout(function() { el.style.display = 'none'; }, 5000);
+  }
+
+  function btnYukle(btnId, metin) {
+    var btn = document.getElementById(btnId);
+    btn.textContent = metin;
+    btn.disabled = true;
+    btn.style.opacity = '0.7';
+  }
+  function btnSifirla(btnId, metin) {
+    var btn = document.getElementById(btnId);
+    btn.textContent = metin;
+    btn.disabled = false;
+    btn.style.opacity = '1';
+  }
+
+  // ── GİRİŞ API ───────────────────────────────────
+  async function girisYap() {
+    var email = document.getElementById('giris-email').value.trim();
+    var sifre = document.getElementById('giris-sifre').value;
+    if (!email || !sifre) { hataGoster('giris-hata', 'E-posta ve şifre zorunludur.'); return; }
+
+    btnYukle('giris-btn', 'Giriş yapılıyor...');
+
+    try {
+      var res  = await fetch(API + '/api/auth/giris', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email, sifre: sifre })
+      });
+      var data = await res.json();
+
+      if (res.ok && data.token) {
+        tokenKaydet(data);
+        panelKapat();
+        headerGuncelle();
+      } else {
+        hataGoster('giris-hata', data.mesaj || 'Giriş başarısız.');
+        btnSifirla('giris-btn', 'Giriş Yap');
+      }
+    } catch (e) {
+      hataGoster('giris-hata', 'Sunucuya bağlanılamadı. Backend çalışıyor mu?');
+      btnSifirla('giris-btn', 'Giriş Yap');
+    }
+  }
+
+  // ── KAYIT API ───────────────────────────────────
+  async function kayitOl() {
+    var ad     = document.getElementById('kayit-ad').value.trim();
+    var email  = document.getElementById('kayit-email').value.trim();
+    var sifre  = document.getElementById('kayit-sifre').value;
+    var sifre2 = document.getElementById('kayit-sifre2').value;
+
+    if (!ad || !email || !sifre || !sifre2) { hataGoster('kayit-hata', 'Tüm alanlar zorunludur.'); return; }
+    if (sifre.length < 6) { hataGoster('kayit-hata', 'Şifre en az 6 karakter olmalıdır.'); return; }
+    if (sifre !== sifre2) { hataGoster('kayit-hata', 'Şifreler eşleşmiyor.'); return; }
+
+    btnYukle('kayit-btn', 'Kayıt yapılıyor...');
+
+    try {
+      var res  = await fetch(API + '/api/auth/kayit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ad: ad, email: email, sifre: sifre })
+      });
+      var data = await res.json();
+
+      if (res.ok && data.token) {
+        tokenKaydet(data);
+        panelKapat();
+        headerGuncelle();
+      } else {
+        hataGoster('kayit-hata', data.mesaj || 'Kayıt başarısız.');
+        btnSifirla('kayit-btn', 'Kayıt Ol');
+      }
+    } catch (e) {
+      hataGoster('kayit-hata', 'Sunucuya bağlanılamadı. Backend çalışıyor mu?');
+      btnSifirla('kayit-btn', 'Kayıt Ol');
+    }
+  }
+
+  document.getElementById('giris-btn').addEventListener('click', girisYap);
+  document.getElementById('kayit-btn').addEventListener('click', kayitOl);
+  document.getElementById('giris-sifre').addEventListener('keydown', function(e) { if (e.key === 'Enter') girisYap(); });
+  document.getElementById('kayit-sifre2').addEventListener('keydown', function(e) { if (e.key === 'Enter') kayitOl(); });
+
+  // ── Hamburger ───────────────────────────────────
+  var toggle = document.getElementById('menu-toggle');
+  var menu   = document.getElementById('mobile-menu');
+  var bar1   = document.getElementById('bar1');
+  var bar2   = document.getElementById('bar2');
+  var bar3   = document.getElementById('bar3');
+  toggle.addEventListener('click', function() {
+    var isOpen = menu.classList.toggle('open');
+    if (isOpen) {
+      bar1.style.transform = 'translateY(8px) rotate(45deg)';
+      bar2.style.opacity   = '0';
+      bar3.style.transform = 'translateY(-8px) rotate(-45deg)';
+      bar3.style.width     = '20px';
+    } else {
+      bar1.style.transform = '';
+      bar2.style.opacity   = '1';
+      bar3.style.transform = '';
+      bar3.style.width     = '';
     }
   });
+
+  // Giriş sonrası auth-only linkleri göster/gizle
+  var orijHeaderGuncelle = headerGuncelle;
+  headerGuncelle = function() {
+    orijHeaderGuncelle();
+    var kullanici = mevcutKullanici();
+    document.querySelectorAll('[data-auth-only="true"]').forEach(function(el) {
+      el.classList.toggle('hidden', !kullanici);
+    });
+  };
+
+  // ── Sayfa yüklenince kullanıcıyı göster ─────────
+  headerGuncelle();
 </script>

@@ -1,0 +1,408 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+const API_URL = import.meta.env.PUBLIC_API_URL || 'http://localhost:8080';
+---
+
+<BaseLayout title="Admin Paneli | Hayvan Hakları Platformu">
+
+<div id="yetkisiz" style="display:none;" class="min-h-screen flex items-center justify-center bg-[#FDF9F3]">
+  <div class="text-center px-6">
+    <div class="text-6xl mb-4">🔒</div>
+    <h1 class="text-2xl font-black text-[#1C1814] mb-3">Erişim Reddedildi</h1>
+    <p class="text-[#6B5E55] mb-6">Bu sayfa yalnızca admin yetkililere açıktır.</p>
+    <a href="/" class="btn-accent px-6 py-2.5">Ana Sayfaya Dön</a>
+  </div>
+</div>
+
+<div id="admin-panel" style="display:none;" class="min-h-screen bg-[#F5EFE6]">
+
+  <!-- Üst Bar -->
+  <div class="bg-[#1C1814] text-white px-6 py-4 flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <div class="w-8 h-8 bg-[#B5634B] rounded-lg flex items-center justify-center">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>
+        </svg>
+      </div>
+      <div>
+        <span class="font-black text-base">Admin Paneli</span>
+        <span class="text-white/40 text-xs ml-2">Hayvan Hakları Platformu</span>
+      </div>
+    </div>
+    <div class="flex items-center gap-3">
+      <span id="admin-ad" class="text-sm text-white/70"></span>
+      <a href="/" class="text-xs bg-white/10 hover:bg-white/20 px-3 py-1.5 rounded-lg transition-colors">← Siteye Dön</a>
+    </div>
+  </div>
+
+  <!-- Sekme Navigasyon -->
+  <div class="bg-white border-b border-[#E8DDD2] px-6">
+    <div class="flex gap-0">
+      <button id="sekme-haberler" onclick="sekmeAc('haberler')"
+        class="px-6 py-4 text-sm font-700 border-b-2 border-[#B5634B] text-[#B5634B] font-bold transition-all">
+        Haber İncelemeleri
+      </button>
+      <button id="sekme-kullanicilar" onclick="sekmeAc('kullanicilar')"
+        class="px-6 py-4 text-sm font-600 border-b-2 border-transparent text-[#8A7B6F] hover:text-[#1C1814] font-semibold transition-all">
+        Gönüllü Listesi
+      </button>
+    </div>
+  </div>
+
+  <!-- İçerik -->
+  <div class="flex" style="height:calc(100vh - 109px);">
+
+    <!-- ── HABERLER SEKMESİ ── -->
+    <div id="bolum-haberler" class="flex w-full">
+
+      <!-- Sol: Haber Listesi -->
+      <div class="w-80 flex-shrink-0 bg-white border-r border-[#E8DDD2] flex flex-col">
+        <div class="px-4 py-3 border-b border-[#E8DDD2] flex items-center justify-between">
+          <span class="text-xs font-bold text-[#6B5E55] uppercase tracking-wide">Haberler</span>
+          <div class="flex gap-1.5">
+            <button onclick="haberFiltrele('TUMU')" id="f-tumu" class="filt-btn aktif text-xs px-2.5 py-1 rounded-full font-semibold">Tümü</button>
+            <button onclick="haberFiltrele('BEKLEMEDE')" id="f-beklemede" class="filt-btn text-xs px-2.5 py-1 rounded-full font-semibold">Bekleyen</button>
+          </div>
+        </div>
+        <div id="haber-liste" class="flex-1 overflow-y-auto p-2">
+          <p id="haber-liste-bos" class="text-xs text-[#A89A8E] text-center py-8">Yükleniyor...</p>
+        </div>
+      </div>
+
+      <!-- Sağ: Haber Detay -->
+      <div class="flex-1 flex flex-col overflow-hidden">
+        <div id="haber-bos-ekran" class="flex-1 flex items-center justify-center text-[#A89A8E]">
+          <div class="text-center">
+            <div class="text-4xl mb-3">📰</div>
+            <p class="text-sm">Soldaki listeden bir haber seçin</p>
+          </div>
+        </div>
+
+        <div id="haber-detay" style="display:none;" class="flex-1 flex flex-col overflow-hidden">
+          <!-- Aksiyon çubuğu -->
+          <div class="bg-white border-b border-[#E8DDD2] px-6 py-3 flex items-center gap-3 flex-shrink-0">
+            <span id="detay-durum" class="text-xs font-bold px-3 py-1 rounded-full"></span>
+            <span id="detay-gonderen" class="text-xs text-[#8A7B6F]"></span>
+            <span id="detay-tarih" class="text-xs text-[#A89A8E]"></span>
+            <div class="ml-auto flex gap-2">
+              <button id="btn-onayla" onclick="haberDurumGuncelle('ONAYLANDI')"
+                class="bg-green-600 hover:bg-green-700 text-white text-xs font-bold px-4 py-2 rounded-full transition-colors">
+                Onayla
+              </button>
+              <button id="btn-reddet" onclick="haberDurumGuncelle('REDDEDILDI')"
+                class="bg-red-500 hover:bg-red-600 text-white text-xs font-bold px-4 py-2 rounded-full transition-colors">
+                Reddet
+              </button>
+              <button id="btn-beklet" onclick="haberDurumGuncelle('BEKLEMEDE')"
+                class="bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold px-4 py-2 rounded-full transition-colors">
+                Beklet
+              </button>
+            </div>
+          </div>
+          <!-- İçerik -->
+          <div class="flex-1 overflow-y-auto p-8 bg-white">
+            <div class="max-w-2xl">
+              <div class="flex items-center gap-2 mb-4">
+                <span id="detay-kategori" class="text-xs bg-[#F5EFE6] text-[#6B5E55] px-3 py-1 rounded-full font-semibold"></span>
+              </div>
+              <h2 id="detay-baslik" class="text-2xl font-black text-[#1C1814] leading-snug mb-6"></h2>
+              <p id="detay-icerik" class="text-[#4A3F38] leading-relaxed whitespace-pre-wrap text-base"></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── KULLANICILAR SEKMESİ ── -->
+    <div id="bolum-kullanicilar" style="display:none;" class="flex w-full">
+
+      <!-- Sol: Kullanıcı Listesi -->
+      <div class="w-80 flex-shrink-0 bg-white border-r border-[#E8DDD2] flex flex-col">
+        <div class="px-4 py-3 border-b border-[#E8DDD2]">
+          <span class="text-xs font-bold text-[#6B5E55] uppercase tracking-wide">Gönüllüler</span>
+        </div>
+        <div id="kullanici-liste" class="flex-1 overflow-y-auto p-2">
+          <p id="kullanici-liste-bos" class="text-xs text-[#A89A8E] text-center py-8">Yükleniyor...</p>
+        </div>
+      </div>
+
+      <!-- Sağ: Kullanıcı Detay -->
+      <div class="flex-1 flex flex-col overflow-hidden bg-white">
+        <div id="kullanici-bos-ekran" class="flex-1 flex items-center justify-center text-[#A89A8E]">
+          <div class="text-center">
+            <div class="text-4xl mb-3">👤</div>
+            <p class="text-sm">Soldaki listeden bir kullanıcı seçin</p>
+          </div>
+        </div>
+
+        <div id="kullanici-detay" style="display:none;" class="flex-1 overflow-y-auto p-10">
+          <div class="max-w-sm">
+            <div id="kd-avatar" class="w-16 h-16 rounded-2xl bg-[#B5634B] flex items-center justify-center text-white text-2xl font-black mb-5"></div>
+            <h2 id="kd-ad" class="text-2xl font-black text-[#1C1814] mb-1"></h2>
+            <p id="kd-email" class="text-sm text-[#8A7B6F] mb-2"></p>
+            <p id="kd-tarih" class="text-xs text-[#A89A8E] mb-6"></p>
+
+            <div class="bg-[#F5EFE6] rounded-2xl p-5 mb-6">
+              <p class="text-xs font-bold text-[#6B5E55] uppercase tracking-wide mb-3">Mevcut Yetki</p>
+              <span id="kd-rol" class="text-base font-black"></span>
+            </div>
+
+            <div class="flex flex-col gap-3">
+              <button id="btn-admin-ver" onclick="rolGuncelle('ADMIN')"
+                class="bg-[#1C1814] hover:bg-[#2e2520] text-white font-bold py-3 px-6 rounded-full transition-colors text-sm">
+                Admin Yetkisi Ver
+              </button>
+              <button id="btn-admin-al" onclick="rolGuncelle('GONULLU')"
+                class="bg-red-100 hover:bg-red-200 text-red-700 font-bold py-3 px-6 rounded-full transition-colors text-sm">
+                Admin Yetkisini Al
+              </button>
+            </div>
+
+            <div id="rol-mesaj" style="display:none;" class="mt-4 bg-green-50 border border-green-200 rounded-xl px-4 py-3 text-sm text-green-700"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</BaseLayout>
+
+<style>
+  .filt-btn { background: #F5EFE6; color: #6B5E55; }
+  .filt-btn.aktif { background: #1C1814; color: #fff; }
+</style>
+
+<script define:vars={{ API_URL }}>
+  var API = API_URL;
+  var tumHaberler = [];
+  var aktifHaberFiltreYeni = 'TUMU';
+  var seciliHaberId = null;
+  var seciliKullaniciId = null;
+
+  function mevcutKullanici() {
+    try { return JSON.parse(localStorage.getItem('hhp_user') || 'null'); }
+    catch { return null; }
+  }
+
+  // ── Erişim Kontrolü ─────────────────────────────
+  var kullanici = mevcutKullanici();
+  if (!kullanici || kullanici.rol !== 'ADMIN') {
+    document.getElementById('yetkisiz').style.display = 'flex';
+  } else {
+    document.getElementById('admin-panel').style.display = 'block';
+    document.getElementById('admin-ad').textContent = kullanici.ad;
+    haberleriYukle();
+    kullanicilariYukle();
+  }
+
+  // ── Sekme ────────────────────────────────────────
+  function sekmeAc(sekme) {
+    var isHaber = sekme === 'haberler';
+    document.getElementById('bolum-haberler').style.display = isHaber ? 'flex' : 'none';
+    document.getElementById('bolum-kullanicilar').style.display = isHaber ? 'none' : 'flex';
+    document.getElementById('sekme-haberler').className = 'px-6 py-4 text-sm border-b-2 transition-all font-bold ' +
+      (isHaber ? 'border-[#B5634B] text-[#B5634B]' : 'border-transparent text-[#8A7B6F] hover:text-[#1C1814] font-semibold');
+    document.getElementById('sekme-kullanicilar').className = 'px-6 py-4 text-sm border-b-2 transition-all ' +
+      (!isHaber ? 'border-[#B5634B] text-[#B5634B] font-bold' : 'border-transparent text-[#8A7B6F] hover:text-[#1C1814] font-semibold');
+  }
+  window.sekmeAc = sekmeAc;
+
+  // ── Durum yardımcıları ───────────────────────────
+  var durumMap = {
+    BEKLEMEDE:  { etiket: 'İncelemede', renk: '#92400e', bg: '#fef3c7' },
+    ONAYLANDI:  { etiket: 'Onaylandı',  renk: '#166534', bg: '#dcfce7' },
+    REDDEDILDI: { etiket: 'Reddedildi', renk: '#991b1b', bg: '#fee2e2' }
+  };
+
+  function durumBadge(el, durum) {
+    var d = durumMap[durum] || durumMap.BEKLEMEDE;
+    el.textContent = d.etiket;
+    el.style.color = d.renk;
+    el.style.background = d.bg;
+  }
+
+  // ── HABERLER ─────────────────────────────────────
+  async function haberleriYukle() {
+    var token = localStorage.getItem('hhp_token');
+    try {
+      var res = await fetch(API + '/api/admin/haberler', { headers: { Authorization: 'Bearer ' + token } });
+      var data = await res.json();
+      tumHaberler = data.data || [];
+      haberListesiRender(aktifHaberFiltreYeni);
+    } catch (e) {}
+  }
+
+  function haberFiltrele(filtre) {
+    aktifHaberFiltreYeni = filtre;
+    document.querySelectorAll('.filt-btn').forEach(function(b) { b.classList.remove('aktif'); });
+    document.getElementById('f-' + filtre.toLowerCase()).classList.add('aktif');
+    haberListesiRender(filtre);
+  }
+  window.haberFiltrele = haberFiltrele;
+
+  function haberListesiRender(filtre) {
+    var liste = document.getElementById('haber-liste');
+    var bos   = document.getElementById('haber-liste-bos');
+    liste.querySelectorAll('.haber-kart').forEach(function(k) { k.remove(); });
+
+    var gorunenler = filtre === 'TUMU' ? tumHaberler : tumHaberler.filter(function(h) { return h.durum === filtre; });
+
+    if (gorunenler.length === 0) {
+      bos.textContent = 'Haber yok.';
+      bos.style.display = 'block';
+      return;
+    }
+    bos.style.display = 'none';
+
+    gorunenler.forEach(function(h) {
+      var d = durumMap[h.durum] || durumMap.BEKLEMEDE;
+      var el = document.createElement('div');
+      el.className = 'haber-kart';
+      el.dataset.id = h.id;
+      el.style.cssText = 'padding:0.75rem;border-radius:12px;cursor:pointer;border:1.5px solid #E8DDD2;background:#fff;margin-bottom:6px;transition:border-color 0.15s;';
+      el.innerHTML =
+        '<p style="font-size:0.8rem;font-weight:700;color:#1C1814;line-height:1.35;margin-bottom:5px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">' + h.baslik + '</p>' +
+        '<div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">' +
+          '<span style="font-size:0.65rem;font-weight:700;padding:2px 7px;border-radius:9999px;color:' + d.renk + ';background:' + d.bg + ';">' + d.etiket + '</span>' +
+          '<span style="font-size:0.65rem;color:#8A7B6F;">' + h.gonderen + '</span>' +
+          '<span style="font-size:0.65rem;color:#A89A8E;margin-left:auto;">' + h.tarih + '</span>' +
+        '</div>';
+      el.addEventListener('click', function() {
+        seciliHaberId = h.id;
+        liste.querySelectorAll('.haber-kart').forEach(function(k) { k.style.borderColor = '#E8DDD2'; k.style.background = '#fff'; });
+        el.style.borderColor = '#B5634B';
+        el.style.background = '#FDF9F3';
+        haberDetayGoster(h);
+      });
+      liste.appendChild(el);
+    });
+  }
+
+  function haberDetayGoster(h) {
+    document.getElementById('haber-bos-ekran').style.display = 'none';
+    document.getElementById('haber-detay').style.display = 'flex';
+    durumBadge(document.getElementById('detay-durum'), h.durum);
+    document.getElementById('detay-gonderen').textContent = h.gonderen;
+    document.getElementById('detay-tarih').textContent = h.tarih;
+    document.getElementById('detay-kategori').textContent = h.kategori || 'Kategorisiz';
+    document.getElementById('detay-baslik').textContent = h.baslik;
+    document.getElementById('detay-icerik').textContent = h.icerik;
+  }
+
+  async function haberDurumGuncelle(yeniDurum) {
+    if (!seciliHaberId) return;
+    var token = localStorage.getItem('hhp_token');
+    try {
+      var res = await fetch(API + '/api/admin/haberler/' + seciliHaberId + '/durum', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + token },
+        body: JSON.stringify({ durum: yeniDurum })
+      });
+      var data = await res.json();
+      if (res.ok && data.basari) {
+        var idx = tumHaberler.findIndex(function(h) { return h.id === seciliHaberId; });
+        if (idx !== -1) tumHaberler[idx].durum = yeniDurum;
+        haberListesiRender(aktifHaberFiltreYeni);
+        durumBadge(document.getElementById('detay-durum'), yeniDurum);
+        var kart = document.querySelector('.haber-kart[data-id="' + seciliHaberId + '"]');
+        if (kart) { kart.style.borderColor = '#B5634B'; kart.style.background = '#FDF9F3'; }
+      }
+    } catch (e) {}
+  }
+  window.haberDurumGuncelle = haberDurumGuncelle;
+
+  // ── KULLANICILAR ─────────────────────────────────
+  var tumKullanicilar = [];
+
+  async function kullanicilariYukle() {
+    var token = localStorage.getItem('hhp_token');
+    try {
+      var res = await fetch(API + '/api/admin/kullanicilar', { headers: { Authorization: 'Bearer ' + token } });
+      var data = await res.json();
+      tumKullanicilar = data.data || [];
+      kullaniciListesiRender();
+    } catch (e) {}
+  }
+
+  function kullaniciListesiRender() {
+    var liste = document.getElementById('kullanici-liste');
+    var bos   = document.getElementById('kullanici-liste-bos');
+    liste.querySelectorAll('.kullanici-kart').forEach(function(k) { k.remove(); });
+
+    if (tumKullanicilar.length === 0) {
+      bos.textContent = 'Kullanıcı yok.';
+      bos.style.display = 'block';
+      return;
+    }
+    bos.style.display = 'none';
+
+    tumKullanicilar.forEach(function(k) {
+      var isAdmin = k.rol === 'ADMIN';
+      var el = document.createElement('div');
+      el.className = 'kullanici-kart';
+      el.dataset.id = k.id;
+      el.style.cssText = 'padding:0.75rem;border-radius:12px;cursor:pointer;border:1.5px solid #E8DDD2;background:#fff;margin-bottom:6px;transition:border-color 0.15s;display:flex;align-items:center;gap:10px;';
+      el.innerHTML =
+        '<div style="width:36px;height:36px;border-radius:10px;background:' + (isAdmin ? '#1C1814' : '#B5634B') + ';display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:#fff;flex-shrink:0;">' + k.ad.charAt(0).toUpperCase() + '</div>' +
+        '<div style="min-width:0;">' +
+          '<p style="font-size:0.8rem;font-weight:700;color:#1C1814;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + k.ad + '</p>' +
+          '<p style="font-size:0.65rem;color:#8A7B6F;">' + (isAdmin ? 'Admin' : 'Gönüllü') + '</p>' +
+        '</div>';
+      el.addEventListener('mouseenter', function() { if (el.dataset.secili !== 'true') el.style.borderColor = '#D4856E'; });
+      el.addEventListener('mouseleave', function() { if (el.dataset.secili !== 'true') el.style.borderColor = '#E8DDD2'; });
+      el.addEventListener('click', function() {
+        seciliKullaniciId = k.id;
+        liste.querySelectorAll('.kullanici-kart').forEach(function(c) { c.dataset.secili = 'false'; c.style.borderColor = '#E8DDD2'; c.style.background = '#fff'; });
+        el.dataset.secili = 'true';
+        el.style.borderColor = '#B5634B';
+        el.style.background = '#FDF9F3';
+        kullaniciDetayGoster(k);
+      });
+      liste.appendChild(el);
+    });
+  }
+
+  function kullaniciDetayGoster(k) {
+    document.getElementById('kullanici-bos-ekran').style.display = 'none';
+    document.getElementById('kullanici-detay').style.display = 'block';
+    document.getElementById('kd-avatar').textContent = k.ad.charAt(0).toUpperCase();
+    document.getElementById('kd-ad').textContent = k.ad;
+    document.getElementById('kd-email').textContent = k.email;
+    document.getElementById('kd-tarih').textContent = 'Kayıt: ' + k.tarih;
+    var rolEl = document.getElementById('kd-rol');
+    rolEl.textContent = k.rol === 'ADMIN' ? 'Admin' : 'Gönüllü';
+    rolEl.style.color = k.rol === 'ADMIN' ? '#B5634B' : '#5C7A5E';
+    document.getElementById('btn-admin-ver').style.display = k.rol === 'ADMIN' ? 'none' : 'block';
+    document.getElementById('btn-admin-al').style.display = k.rol === 'ADMIN' ? 'block' : 'none';
+    document.getElementById('rol-mesaj').style.display = 'none';
+  }
+
+  async function rolGuncelle(yeniRol) {
+    if (!seciliKullaniciId) return;
+    var token = localStorage.getItem('hhp_token');
+    try {
+      var res = await fetch(API + '/api/admin/kullanicilar/' + seciliKullaniciId + '/rol', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + token },
+        body: JSON.stringify({ rol: yeniRol })
+      });
+      var data = await res.json();
+      if (res.ok && data.basari) {
+        var idx = tumKullanicilar.findIndex(function(k) { return k.id === seciliKullaniciId; });
+        if (idx !== -1) tumKullanicilar[idx].rol = yeniRol;
+        kullaniciListesiRender();
+        var seciliKart = document.querySelector('.kullanici-kart[data-id="' + seciliKullaniciId + '"]');
+        if (seciliKart) { seciliKart.dataset.secili = 'true'; seciliKart.style.borderColor = '#B5634B'; seciliKart.style.background = '#FDF9F3'; }
+        var guncelK = tumKullanicilar[idx];
+        if (guncelK) kullaniciDetayGoster(guncelK);
+        var mesajEl = document.getElementById('rol-mesaj');
+        mesajEl.textContent = yeniRol === 'ADMIN' ? 'Admin yetkisi verildi.' : 'Admin yetkisi alındı.';
+        mesajEl.style.display = 'block';
+        setTimeout(function() { mesajEl.style.display = 'none'; }, 3000);
+      }
+    } catch (e) {}
+  }
+  window.rolGuncelle = rolGuncelle;
+</script>
