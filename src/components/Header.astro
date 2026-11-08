@@ -1,7 +1,8 @@
 ---
+import { BACKEND_ENABLED, API_URL } from "../config";
+
 const currentPath = Astro.url.pathname;
-const API_URL = import.meta.env.PUBLIC_API_URL || 'http://localhost:8080';
-const links = [
+const allLinks = [
   { href: "/",              label: "Ana Sayfa" },
   { href: "/manifesto",     label: "Manifesto" },
   { href: "/haberler",      label: "Haberler" },
@@ -9,6 +10,7 @@ const links = [
   { href: "/iletisim",      label: "İletişim" },
   { href: "/haberim-var",   label: "Haberim Var", authOnly: true },
 ];
+const links = BACKEND_ENABLED ? allLinks : allLinks.filter(link => !link.authOnly);
 ---
 
 <header class="sticky top-0 z-50 bg-[#B5634B]/92 backdrop-blur-md border-b border-[#E8DDD2] shadow-sm">
@@ -50,6 +52,7 @@ const links = [
           <a href="/iletisim" class="btn-accent text-sm py-2 px-5">Bize Ulaş</a>
         </span>
 
+        {BACKEND_ENABLED && (<>
         <!-- Giriş YOK: Gönüllü Giriş butonu -->
         <button id="auth-open-btn"
           class="hidden sm:inline-flex items-center gap-2 border-2 border-[#1C1814] text-[#1C1814] text-sm font-semibold px-4 py-2 rounded-full hover:bg-[#1C1814] hover:text-white transition-all duration-200">
@@ -74,6 +77,7 @@ const links = [
             </svg>
           </button>
         </div>
+        </>)}
 
         <!-- Hamburger -->
         <button id="menu-toggle"
@@ -99,14 +103,42 @@ const links = [
     ))}
     <div class="flex gap-2 mt-3 pt-3 border-t border-[#E8DDD2]">
       <a href="/iletisim" class="flex-1 text-center btn-accent text-sm py-2.5">Bize Ulaş</a>
-      <button id="auth-open-btn-mobile"
-        class="flex-1 border-2 border-[#1C1814] text-[#1C1814] text-sm font-semibold py-2.5 rounded-full hover:bg-[#1C1814] hover:text-white transition-all">
-        Gönüllü Giriş
-      </button>
+      {BACKEND_ENABLED && (
+        <button id="auth-open-btn-mobile"
+          class="flex-1 border-2 border-[#1C1814] text-[#1C1814] text-sm font-semibold py-2.5 rounded-full hover:bg-[#1C1814] hover:text-white transition-all">
+          Gönüllü Giriş
+        </button>
+      )}
     </div>
   </div>
 </header>
 
+<script is:inline>
+  // ── Hamburger ───────────────────────────────────
+  (function() {
+    var toggle = document.getElementById('menu-toggle');
+    var menu   = document.getElementById('mobile-menu');
+    var bar1   = document.getElementById('bar1');
+    var bar2   = document.getElementById('bar2');
+    var bar3   = document.getElementById('bar3');
+    toggle.addEventListener('click', function() {
+      var isOpen = menu.classList.toggle('open');
+      if (isOpen) {
+        bar1.style.transform = 'translateY(8px) rotate(45deg)';
+        bar2.style.opacity   = '0';
+        bar3.style.transform = 'translateY(-8px) rotate(-45deg)';
+        bar3.style.width     = '20px';
+      } else {
+        bar1.style.transform = '';
+        bar2.style.opacity   = '1';
+        bar3.style.transform = '';
+        bar3.style.width     = '';
+      }
+    });
+  })();
+</script>
+
+{BACKEND_ENABLED && (<>
 <!-- Overlay -->
 <div id="auth-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:60;"></div>
 
@@ -424,27 +456,6 @@ const links = [
   document.getElementById('giris-sifre').addEventListener('keydown', function(e) { if (e.key === 'Enter') girisYap(); });
   document.getElementById('kayit-sifre2').addEventListener('keydown', function(e) { if (e.key === 'Enter') kayitOl(); });
 
-  // ── Hamburger ───────────────────────────────────
-  var toggle = document.getElementById('menu-toggle');
-  var menu   = document.getElementById('mobile-menu');
-  var bar1   = document.getElementById('bar1');
-  var bar2   = document.getElementById('bar2');
-  var bar3   = document.getElementById('bar3');
-  toggle.addEventListener('click', function() {
-    var isOpen = menu.classList.toggle('open');
-    if (isOpen) {
-      bar1.style.transform = 'translateY(8px) rotate(45deg)';
-      bar2.style.opacity   = '0';
-      bar3.style.transform = 'translateY(-8px) rotate(-45deg)';
-      bar3.style.width     = '20px';
-    } else {
-      bar1.style.transform = '';
-      bar2.style.opacity   = '1';
-      bar3.style.transform = '';
-      bar3.style.width     = '';
-    }
-  });
-
   // Giriş sonrası auth-only linkleri göster/gizle
   var orijHeaderGuncelle = headerGuncelle;
   headerGuncelle = function() {
@@ -458,3 +469,4 @@ const links = [
   // ── Sayfa yüklenince kullanıcıyı göster ─────────
   headerGuncelle();
 </script>
+</>)}
